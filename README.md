@@ -14,6 +14,9 @@ been put into providing proper console output and meaningful messages.
 $ docker run flownative/php
 ```
 
+![Screenshot with example log output](docs/php-log-example.png
+"Example log output")
+
 ## Example usage
 
 Here's an example of a Docker Compose configuration using this image as
