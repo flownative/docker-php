@@ -28,6 +28,9 @@ build_create_directories() {
         "${PHP_BASE_PATH}/tmp" \
         "${PHP_BASE_PATH}/log"
 
+    # Activate freetype-config-workaround (see freetype-config.sh):
+    ln -s ${PHP_BASE_PATH}/bin/freetype-config.sh /usr/local/bin/freetype-config;
+
     # Forward error log to Docker log collector
     ln -sf /dev/stderr "${PHP_BASE_PATH}/log/error.log"
 }
@@ -129,6 +132,7 @@ build_compile_php() {
 
     if [[ "${PHP_VERSION}" =~ ^7.[1-3] ]]; then
         info "🛠 Running configure for PHP 7.3 or lower ..."
+
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
