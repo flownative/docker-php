@@ -1,1 +1,1 @@
-export BUILD_ARG_PHP_VERSION=7.4.4
+export BUILD_ARG_PHP_VERSION=$(curl --silent "${PHP_VERSION_URL}")

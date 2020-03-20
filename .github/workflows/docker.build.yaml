@@ -1,10 +1,5 @@
 name: Build Docker Image
-on:
-  push:
-    branches-ignore:
-      - '**'
-    tags:
-      - 'v*.*.*'
+on: [push]
 
 jobs:
   build:
@@ -15,6 +10,8 @@ jobs:
       - name: Build Docker image
         id: build_image
         uses: flownative/action-docker-build@v1
+        env:
+          PHP_VERSION_URL: https://storage.googleapis.com/versions.flownative.io/projects/beach/channels/stable/versions/beach-phpfpm-7_4.txt
         with:
           tag_ref: ${{ github.ref }}
           git_repository_url: https://github.com/${{ github.repository }}
@@ -22,9 +19,9 @@ jobs:
           image_name: flownative/docker-php/php
           registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
 
-      - name: Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.GITHUB_BOT_TOKEN }}
-          event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}"}'
+#      - name: Dispatch
+#        uses: peter-evans/repository-dispatch@v1
+#        with:
+#          token: ${{ secrets.GITHUB_BOT_TOKEN }}
+#          event-type: image-built
+#          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}"}'
