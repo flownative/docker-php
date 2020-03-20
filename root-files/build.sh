@@ -370,6 +370,12 @@ build_clean() {
 case $1 in
 init)
     banner_flownative 'PHP'
+
+    if [[ "${PHP_VERSION}" =~ ^7.[1-4] ]]; then
+        error "🛠 Unsupported PHP version '${PHP_VERSION}'"
+        exit 1
+    fi
+
     build_create_directories
     ;;
 prepare)
