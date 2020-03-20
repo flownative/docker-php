@@ -3,6 +3,10 @@ on:
   schedule:
     - cron: '30 0 * * *'
   push:
+    branches-ignore:
+      - '**'
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build-7_1:
