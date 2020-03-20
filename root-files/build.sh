@@ -127,34 +127,69 @@ build_compile_php() {
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
 
-    info "🛠 Running configure for PHP ..."
-    ./configure \
-        --prefix=${PHP_BASE_PATH} \
-        --with-config-file-path="${PHP_BASE_PATH}/etc" \
-        --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
-        --disable-cgi \
-        --enable-fpm \
-        --enable-gd \
-        --enable-pcntl \
-        --enable-calendar \
-        --enable-exif \
-        --enable-ftp \
-        --enable-mbstring \
-        --enable-intl \
-        --with-curl \
-        --with-freetype \
-        --with-jpeg \
-        --with-gmp \
-        --with-mysqli \
-        --with-openssl \
-        --with-pdo-mysql \
-        --with-readline \
-        --with-system-ciphers \
-        --with-webp \
-        --with-zip \
-        --with-zlib \
-        --without-pear \
-        >$(debug_device)
+    if [[ "${PHP_VERSION}" =~ ^7.[1-3] ]]; then
+        info "🛠 Running configure for PHP 7.3 or lower ..."
+        ./configure \
+            --prefix=${PHP_BASE_PATH} \
+            --with-config-file-path="${PHP_BASE_PATH}/etc" \
+            --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
+            --disable-cgi \
+            --enable-fpm \
+            --enable-pcntl \
+            --enable-calendar \
+            --enable-exif \
+            --enable-ftp \
+            --enable-mbstring \
+            --enable-zip \
+            --enable-intl \
+            --with-curl \
+            --with-freetype-dir=/usr/include \
+            --with-jpeg-dir=/usr/include \
+            --with-gd \
+            --with-gmp \
+            --with-mysqli \
+            --with-openssl \
+            --with-pdo-mysql \
+            --with-png-dir=/usr/include \
+            --with-readline \
+            --with-system-ciphers \
+            --with-webp-dir=/usr/include \
+            --with-zlib \
+            --without-pear \
+            >$(debug_device)
+    elif [[ "${PHP_VERSION}" =~ ^7.4 ]]; then
+        info "🛠 Running configure for PHP 7.4 ..."
+        ./configure \
+            --prefix=${PHP_BASE_PATH} \
+            --with-config-file-path="${PHP_BASE_PATH}/etc" \
+            --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
+            --disable-cgi \
+            --enable-fpm \
+            --enable-gd \
+            --enable-pcntl \
+            --enable-calendar \
+            --enable-exif \
+            --enable-ftp \
+            --enable-mbstring \
+            --enable-intl \
+            --with-curl \
+            --with-freetype \
+            --with-jpeg \
+            --with-gmp \
+            --with-mysqli \
+            --with-openssl \
+            --with-pdo-mysql \
+            --with-readline \
+            --with-system-ciphers \
+            --with-webp \
+            --with-zip \
+            --with-zlib \
+            --without-pear \
+            >$(debug_device)
+    else
+        error "🛠 Unsupported PHP version ${PHP_VERSION}"
+        exit 1
+    fi
 
     info "🛠 Compiling PHP ..."
     make -j"$(nproc)" >$(debug_device)
