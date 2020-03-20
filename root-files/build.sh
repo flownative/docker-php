@@ -26,10 +26,7 @@ build_create_directories() {
         "${PHP_BASE_PATH}/etc/conf.d" \
         "${PHP_BASE_PATH}/ext" \
         "${PHP_BASE_PATH}/tmp" \
-        "${PHP_BASE_PATH}/log" \
-        "${BEACH_APPLICATION_PATH}/Data"
-
-    chown -R 1000 "${BEACH_APPLICATION_PATH}"
+        "${PHP_BASE_PATH}/log"
 
     # Forward error log to Docker log collector
     ln -sf /dev/stderr "${PHP_BASE_PATH}/log/error.log"
@@ -82,14 +79,32 @@ build_get_build_packages() {
 # ---------------------------------------------------------------------------------------
 # build_get_runtime_packages() - Returns a list of packages which are needed during runtime
 #
-# @global PHP_BASE_PATH
 # @return List of packages
 #
 build_get_runtime_packages() {
     local packages="
         gettext
 
+        libcurl4
+        libonig5
+        libreadline7
         libssl1.1
+        libzip4
+        libncurses6
+
+        libsqlite3-0
+   "
+    echo $packages
+}
+
+# ---------------------------------------------------------------------------------------
+# build_get_unneccessary_packages() - Not needed packages, can be removed
+#
+# @return List of packages
+#
+build_get_unneccessary_packages() {
+    local packages="
+        cmake
    "
     echo $packages
 }
@@ -105,7 +120,10 @@ build_compile_php() {
 
     php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
     info "🛠 Downloading source code for PHP ${PHP_VERSION} from ${php_source_url} ..."
-    with_backoff "curl -sSL ${php_source_url} -o php.tar.gz" || (error "Failed downloading PHP source from ${php_source_url}"; exit 1)
+    with_backoff "curl -sSL ${php_source_url} -o php.tar.gz" || (
+        error "Failed downloading PHP source from ${php_source_url}"
+        exit 1
+    )
 
     mkdir -p "${PHP_BASE_PATH}/src"
     tar -xf php.tar.gz -C "${PHP_BASE_PATH}/src" --strip-components=1
@@ -144,14 +162,14 @@ build_compile_php() {
         --with-webp-dir=/usr/include \
         --with-zlib \
         --without-pear \
-        > $(debug_device)
+        >$(debug_device)
 
     info "🛠 Compiling PHP ..."
-    make -j"$(nproc)" > $(debug_device)
-    make install > $(debug_device)
+    make -j"$(nproc)" >$(debug_device)
+    make install >$(debug_device)
 
     info "🛠 Cleaning up ..."
-    make clean > $(debug_device)
+    make clean >$(debug_device)
     rm -rf /tmp/pear
 }
 
@@ -170,7 +188,10 @@ build_php_extension() {
     local -r extension_name="${1:-missing extension name}"
     local -r extension_build_configration_script="${PHP_BASE_PATH}/build/extensions/${extension_name}/${extension_name}.sh"
 
-    . "${extension_build_configration_script}" || (error "Failed sourcing extension build configuration script from ${extension_build_configration_script}"; exit 1)
+    . "${extension_build_configration_script}" || (
+        error "Failed sourcing extension build configuration script from ${extension_build_configration_script}"
+        exit 1
+    )
 
     local -r extensions_dir="${PHP_BASE_PATH}/src/ext"
     local -r extension_dir="${extensions_dir}/${extension_name}"
@@ -203,8 +224,14 @@ build_php_extension() {
         # Download and extract source code
         info "🔌 ${extension_name}: Downloading extension source code from ${extension_url} ..."
 
-        with_backoff "curl -sSL ${extension_url} -o ${extension_name}.tar.gz" || (error "Failed downloading extension ${extension_name}"; exit 1)
-        tar -xf ${extension_name}.tar.gz -C ${extensions_dir} 2>/dev/null || (error "Tar failed extracting the archive downloaded from ${extension_url}, returned exit code $?"; exit 1)
+        with_backoff "curl -sSL ${extension_url} -o ${extension_name}.tar.gz" || (
+            error "Failed downloading extension ${extension_name}"
+            exit 1
+        )
+        tar -xf ${extension_name}.tar.gz -C ${extensions_dir} 2>/dev/null || (
+            error "Tar failed extracting the archive downloaded from ${extension_url}, returned exit code $?"
+            exit 1
+        )
 
         mv "${extensions_dir}/${extension_name}"-* "${extension_dir}"
         rm -f ${extension_name}.tar.gz "${extensions_dir}/package.xml"
@@ -216,12 +243,15 @@ build_php_extension() {
     # Configure
 
     cd "${extension_dir}"
-    test -f config.m4 || (error "No config.m4 file found in extension directory ${extension_dir}"; exit 1)
+    test -f config.m4 || (
+        error "No config.m4 file found in extension directory ${extension_dir}"
+        exit 1
+    )
 
     info "🔌 ${extension_name}: Running phpize ..."
     phpize 1>$(debug_device)
 
-    if [[ ${extension_configure_arguments} = "" ]]; then
+    if [[ ${extension_configure_arguments} == "" ]]; then
         info "🔌 ${extension_name}: Running configure without additional arguments ..."
     else
         info "🔌 ${extension_name}: Running configure ${extension_configure_arguments} ..."
@@ -230,7 +260,10 @@ build_php_extension() {
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
 
-    ./configure ${extension_configure_arguments} 1>$(debug_device) || (error "Configure failed for extension ${extension_name}"; exit 1)
+    ./configure ${extension_configure_arguments} 1>$(debug_device) || (
+        error "Configure failed for extension ${extension_name}"
+        exit 1
+    )
 
     # ---------------------------------------------------------------------------------
     # Compile
@@ -252,16 +285,24 @@ build_php_extension() {
                     line="extension=$(basename "${module}")"
                 fi
                 if ! grep -q "${line}" "${extension_ini_path_and_filename}" &>/dev/null; then
-                    echo "$line" >> ${extension_ini_path_and_filename}
+                    echo "$line" >>${extension_ini_path_and_filename}
                 fi
             fi
         done
     fi
 
+    # -----------------------------------------------------------------------------------
+    # Clean up
+
     info "🔌 ${extension_name}: Cleaning up ..."
 
     make clean 1>$(debug_device)
     make distclean 1>$(debug_device)
+
+    if [[ "${extension_build_packages}" != "" ]]; then
+        info "🔌 ${extension_name}: Removing build packages"
+        packages_remove ${extension_build_packages} 1>$(debug_device)
+    fi
 }
 
 # ---------------------------------------------------------------------------------------
@@ -273,7 +314,10 @@ build_php_extension() {
 build_adjust_permissions() {
     chown -R root:root "${PHP_BASE_PATH}"
     chmod -R g+rwX "${PHP_BASE_PATH}"
-    chmod 777 "${PHP_BASE_PATH}"/etc
+
+    chown -R 1000 \
+        "${PHP_BASE_PATH}/etc" \
+        "${PHP_BASE_PATH}/tmp"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -284,8 +328,12 @@ build_adjust_permissions() {
 #
 build_clean() {
     rm -rf \
+        /etc/emacs \
+        /usr/include \
         /var/cache/* \
         /var/log/* \
+        "${PHP_BASE_PATH}/include" \
+        "${PHP_BASE_PATH}/php/man" \
         "${PHP_BASE_PATH}/src"
 }
 
@@ -293,25 +341,26 @@ build_clean() {
 # Main routine
 
 case $1 in
-    init)
-        banner_flownative PHP
-        build_create_directories
-        ;;
-    prepare)
-        packages_install $(build_get_runtime_packages) 1>$(debug_device)
-        packages_install $(build_get_build_packages) 1>$(debug_device)
-        ;;
-    build)
-        build_compile_php
-        ;;
-    build_extension)
-        build_php_extension $2
-        ;;
-    clean)
-        build_adjust_permissions
+init)
+    banner_flownative 'PHP'
+    build_create_directories
+    ;;
+prepare)
+    packages_install $(build_get_runtime_packages) 1>$(debug_device)
+    packages_install $(build_get_build_packages) 1>$(debug_device)
+    ;;
+build)
+    build_compile_php
+    ;;
+build_extension)
+    build_php_extension $2
+    ;;
+clean)
+    build_adjust_permissions
 
-        packages_remove $(build_get_build_packages) 1>$(debug_device)
-        packages_remove_docs_and_caches 1>$(debug_device)
-        build_clean
-        ;;
+    packages_remove $(build_get_build_packages) 1>$(debug_device)
+    packages_remove $(build_get_unneccessary_packages) 1>$(debug_device)
+    packages_remove_docs_and_caches 1>$(debug_device)
+    build_clean
+    ;;
 esac
