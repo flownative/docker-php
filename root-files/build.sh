@@ -26,10 +26,7 @@ build_create_directories() {
         "${PHP_BASE_PATH}/etc/conf.d" \
         "${PHP_BASE_PATH}/ext" \
         "${PHP_BASE_PATH}/tmp" \
-        "${PHP_BASE_PATH}/log" \
-        "${BEACH_APPLICATION_PATH}/Data"
-
-    chown -R 1000 "${BEACH_APPLICATION_PATH}"
+        "${PHP_BASE_PATH}/log"
 
     # Forward error log to Docker log collector
     ln -sf /dev/stderr "${PHP_BASE_PATH}/log/error.log"
@@ -88,6 +85,7 @@ build_get_runtime_packages() {
         libreadline7
         libssl1.1
         libzip4
+        libncurses6
 
         libsqlite3-0
    "
@@ -302,41 +300,6 @@ build_php_extension() {
 }
 
 # ---------------------------------------------------------------------------------------
-# build_sshd() - Install and configure the SSH daemon
-#
-# @global SSHD_BASE_PATH
-# @return void
-#
-build_sshd() {
-    packages_install openssh-server
-
-    # Clean up a few directories / files we don't need:
-    rm -rf \
-        /etc/ufw \
-        /etc/init.d \
-        /etc/rc2.d/S01ssh \
-        /etc/rc2.d/S01ssh \
-        /lib/systemd/system/rescue-ssh.target \
-        /lib/systemd/system/ssh*
-
-    # Create directories
-    mkdir -p \
-        "${SSHD_BASE_PATH}/etc" \
-        "${SSHD_BASE_PATH}/sbin" \
-        "${SSHD_BASE_PATH}/tmp" \
-
-    # Move SSHD files to correct location:
-    mv /usr/sbin/sshd ${SSHD_BASE_PATH}/sbin/
-
-    chown -R 1000 \
-        "${SSHD_BASE_PATH}/etc" \
-        "${SSHD_BASE_PATH}/tmp"
-
-    info "SSHD: Creating user beach (1000)"
-    useradd --home-dir /application --no-create-home --no-user-group --shell /bin/bash --uid 1000 beach 1>$(debug_device)
-}
-
-# ---------------------------------------------------------------------------------------
 # build_adjust_permissions() - Adjust permissions for a few paths and files
 #
 # @global PHP_BASE_PATH
@@ -373,7 +336,7 @@ build_clean() {
 
 case $1 in
 init)
-    banner_flownative PHP
+    banner_flownative 'PHP'
     build_create_directories
     ;;
 prepare)
@@ -385,9 +348,6 @@ build)
     ;;
 build_extension)
     build_php_extension $2
-    ;;
-sshd)
-    build_sshd
     ;;
 clean)
     build_adjust_permissions
