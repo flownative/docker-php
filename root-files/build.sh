@@ -45,31 +45,28 @@ build_get_build_packages() {
         build-essential
         cmake
         curl
+        file
         pkg-config
         re2c
-        file
 
         libcurl4-openssl-dev
+        libfreetype6-dev
         libgmp-dev
         libicu-dev
+        libjpeg62-turbo-dev
         libltdl-dev
-        libmcrypt-dev
+        libmariadb-dev
         libmcrypt-dev
         libonig-dev
+        libpng-dev
         libpspell-dev
-        libreadline-dev
+        libreadline6-dev
+        libsqlite3-dev
         libssl-dev
+        libwebp-dev
         libxml2-dev
         libzip-dev
-
-        libfreetype6-dev
-        libjpeg62-turbo-dev
-        libpng-dev
-        libwebp-dev
-
-        libmariadb-dev
-        libsqlite3-dev
-   "
+    "
     echo $packages
 }
 
@@ -88,7 +85,8 @@ build_get_runtime_packages() {
         libncurses6
 
         libsqlite3-0
-   "
+    "
+
     echo $packages
 }
 
