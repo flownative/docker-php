@@ -116,7 +116,7 @@ build_compile_php() {
 
     php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
     info "🛠 Downloading source code for PHP ${PHP_VERSION} from ${php_source_url} ..."
-    with_backoff "curl -sSL ${php_source_url} -o php.tar.gz" || (
+    with_backoff "curl --retry 5 -sSL ${php_source_url} -o php.tar.gz" || (
         error "Failed downloading PHP source from ${php_source_url}"
         exit 1
     )
@@ -255,7 +255,7 @@ build_php_extension() {
         # Download and extract source code
         info "🔌 ${extension_name}: Downloading extension source code from ${extension_url} ..."
 
-        with_backoff "curl -sSL ${extension_url} -o ${extension_name}.tar.gz" || (
+        with_backoff "curl --retry 5 -sSL ${extension_url} -o ${extension_name}.tar.gz" || (
             error "Failed downloading extension ${extension_name}"
             exit 1
         )
