@@ -138,19 +138,20 @@ build_compile_php() {
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
             --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
             --disable-cgi \
-            --enable-fpm \
-            --enable-pcntl \
             --enable-calendar \
             --enable-exif \
+            --enable-fpm \
             --enable-ftp \
-            --enable-mbstring \
-            --enable-zip \
             --enable-intl \
+            --enable-mbstring \
+            --enable-pcntl \
+            --enable-soap \
+            --enable-zip \
             --with-curl \
             --with-freetype-dir=/usr/include \
-            --with-jpeg-dir=/usr/include \
             --with-gd \
             --with-gmp \
+            --with-jpeg-dir=/usr/include \
             --with-mysqli \
             --with-openssl \
             --with-pdo-mysql \
@@ -168,18 +169,19 @@ build_compile_php() {
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
             --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
             --disable-cgi \
-            --enable-fpm \
-            --enable-gd \
-            --enable-pcntl \
             --enable-calendar \
             --enable-exif \
+            --enable-fpm \
             --enable-ftp \
-            --enable-mbstring \
+            --enable-gd \
             --enable-intl \
+            --enable-mbstring \
+            --enable-pcntl \
+            --enable-soap \
             --with-curl \
             --with-freetype \
-            --with-jpeg \
             --with-gmp \
+            --with-jpeg \
             --with-mysqli \
             --with-openssl \
             --with-pdo-mysql \
