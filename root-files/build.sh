@@ -114,7 +114,7 @@ build_get_unneccessary_packages() {
 build_compile_php() {
     local php_source_url
 
-    php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
+    php_source_url="https://github.com/php/php-src/archive/php-${PHP_VERSION}.tar.gz"
     info "🛠 Downloading source code for PHP ${PHP_VERSION} from ${php_source_url} ..."
     with_backoff "curl -sSL ${php_source_url} -o php.tar.gz" "15" || (
         error "Failed downloading PHP source from ${php_source_url}"
@@ -127,12 +127,21 @@ build_compile_php() {
 
     cd "${PHP_BASE_PATH}/src"
 
+    info "🛠 Generating build configuration ..."
+    ./buildconf --force >$(debug_device)
+
+    if [[ ! -f configure ]]; then
+        error "🛠 Failed generating build configuration, 'configure' not found"
+        # shellcheck disable=SC2012
+        ls | output
+        exit 1
+    fi
+
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
 
     if [[ "${PHP_VERSION}" =~ ^7.[1-3] ]]; then
         info "🛠 Running configure for PHP 7.3 or lower ..."
-
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
