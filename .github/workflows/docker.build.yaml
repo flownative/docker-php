@@ -11,6 +11,8 @@ on:
 jobs:
   build-7_1:
     runs-on: ubuntu-latest
+    env:
+      PHP_VERSION: 7.1.33
     steps:
       - uses: actions/checkout@v2
         with:
@@ -24,12 +26,10 @@ jobs:
       - name: Build Docker image
         id: build_image
         uses: flownative/action-docker-build@v1
-        env:
-          BUILD_ARG_PHP_VERSION: 7.1.33
         with:
           tag_ref: ${{ steps.latest_version.outputs.tag }}
           image_name: flownative/docker-php/php
-          image_tag: 7.1.33
+          image_tag: ${{ env.PHP_VERSION }}
           git_repository_url: https://github.com/${{ github.repository }}
           git_sha: ${{ github.sha }}
           registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
