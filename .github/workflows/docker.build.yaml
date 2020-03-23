@@ -1,4 +1,4 @@
-name: Nightly Builds
+name: Build Docker images
 on:
   schedule:
     - cron: '30 0 * * *'
