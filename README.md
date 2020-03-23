@@ -104,7 +104,7 @@ version for some of the tools as build arguments:
 
 ```bash
 docker build \
-    --build-arg PHP_VERSION=7.4.3 \
+    --build-arg PHP_VERSION=7.4.4 \
     -t flownative/php:latest .
 ```
 
