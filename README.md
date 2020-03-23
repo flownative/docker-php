@@ -63,13 +63,15 @@ similar mechanism in Kubernetes or your actual platform.
 
 ### Environment variables
 
-| Variable Name                  | Type    | Default                               | Description                                                        |
-|:-------------------------------|:--------|:--------------------------------------|:-------------------------------------------------------------------|
-| PHP_BASE_PATH                  | string  | /opt/flownative/php                   | Base path for PHP (read-only)                                      |
-| PHP_FPM_USER                   | string  | 1000                                  | User id for running PHP (read-only)                                |
-| PHP_FPM_GROUP                  | string  | 1000                                  | Group id for running PHP (read-only)                               |
-| PHP_FPM_PORT                   | string  | 9000                                  | Port the PHP-FPM process listens to                                |
-| PHP_FPM_MAX_CHILDREN           | string  | 20                                    | Maximum number of children to run                                  |
+| Variable Name        | Type   | Default             | Description                                                                                         |
+|:---------------------|:-------|:--------------------|:----------------------------------------------------------------------------------------------------|
+| PHP_BASE_PATH        | string | /opt/flownative/php | Base path for PHP (read-only)                                                                       |
+| PHP_DATE_TIMEZONE    | string |                     | Default timezone ([doc](https://www.php.net/manual/en/datetime.configuration.php#ini.date.timezone) |
+| PHP_MEMORY_LIMIT     | string | 750M                | PHP memory limit ([doc](https://www.php.net/manual/en/ini.core.php#ini.memory-limit)                |
+| PHP_FPM_USER         | string | 1000                | User id for running PHP (read-only)                                                                 |
+| PHP_FPM_GROUP        | string | 1000                | Group id for running PHP (read-only)                                                                |
+| PHP_FPM_PORT         | string | 9000                | Port the PHP-FPM process listens to                                                                 |
+| PHP_FPM_MAX_CHILDREN | string | 20                  | Maximum number of children to run                                                                   |
 
 ## Security aspects
 
