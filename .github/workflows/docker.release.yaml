@@ -23,6 +23,14 @@ jobs:
           target_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           target_registry_endpoint: https://docker.pkg.github.com/v2/
 
+      - name: Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_BOT_TOKEN }}
+          repository: flownative/docker-beach-php
+          event-type: image-released
+          client-payload: '{"image_name": "${{ github.event.client_payload.image_name }}", "image_tag": "${{ github.event.client_payload.image_tag }}", "php_version": "${{ github.event.client_payload.php_version }}", "php_version_minor": "${{ github.event.client_payload.php_version_minor }}"}'
+
   release-google:
     runs-on: ubuntu-latest
     needs: release-github

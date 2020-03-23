@@ -39,7 +39,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_BOT_TOKEN }}
           event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}"}'
+          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "7.1"}'
 
   build-7_2:
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_BOT_TOKEN }}
           event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}"}'
+          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "7.2"}'
 
   build-7_3:
     runs-on: ubuntu-latest
@@ -103,7 +103,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_BOT_TOKEN }}
           event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}"}'
+          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "7.3"}'
 
   build-7_4:
     runs-on: ubuntu-latest
@@ -135,4 +135,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_BOT_TOKEN }}
           event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}"}'
+          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "7.4"}'
