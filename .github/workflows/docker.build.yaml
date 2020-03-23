@@ -25,10 +25,11 @@ jobs:
         id: build_image
         uses: flownative/action-docker-build@v1
         env:
-          PHP_VERSION_URL: https://storage.googleapis.com/versions.flownative.io/projects/beach/channels/stable/versions/beach-phpfpm-7_1.txt
+          BUILD_ARG_PHP_VERSION: 7.1.33
         with:
           tag_ref: ${{ steps.latest_version.outputs.tag }}
           image_name: flownative/docker-php/php
+          image_tag: 7.1.33
           git_repository_url: https://github.com/${{ github.repository }}
           git_sha: ${{ github.sha }}
           registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
