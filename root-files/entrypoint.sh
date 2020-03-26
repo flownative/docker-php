@@ -7,21 +7,27 @@ set -o pipefail
 
 # Load lib
 . "${FLOWNATIVE_LIB_PATH}/banner.sh"
-. "${FLOWNATIVE_LIB_PATH}/validation.sh"
 . "${FLOWNATIVE_LIB_PATH}/php-fpm.sh"
-
-eval "$(php_fpm_env)"
+. "${FLOWNATIVE_LIB_PATH}/supervisor.sh"
 
 banner_flownative PHP
 
+eval "$(php_fpm_env)"
+eval "$(supervisor_env)"
+
+php_fpm_initialize
+
+supervisor_initialize
+supervisor_start
+
+trap 'supervisor_stop' SIGINT SIGTERM
+
 if [[ "$*" = *"run"* ]]; then
-    php_fpm_initialize
-
-    trap 'php_fpm_stop' SIGINT SIGTERM
-    php_fpm_start
-
-    wait "$(php_fpm_get_pid)"
-    # This line will not be reached, because a trap handles termination
+    supervisor_pid=$(supervisor_get_pid)
+    info "Entrypoint: Start up complete"
+    # We can't use "wait" because supervisord is not a direct child of this shell:
+    while [ -e "/proc/${supervisor_pid}" ]; do sleep 1.1; done
+    info "Good bye 👋"
 else
     "$@"
 fi

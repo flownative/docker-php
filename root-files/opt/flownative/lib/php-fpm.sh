@@ -37,72 +37,6 @@ EOF
 }
 
 # ---------------------------------------------------------------------------------------
-# php_fpm_get_pid() - Return the php process id
-#
-# @global PHP_* The PHP_ environment variables
-# @return Returns the PHP process id, if it is running, otherwise 0
-#
-php_fpm_get_pid() {
-    local pid
-    pid=$(process_get_pid_from_file "${PHP_TMP_PATH}/php-fpm.pid")
-
-    if [[ -n "${pid}" ]]; then
-        echo "${pid}"
-    else
-        false
-    fi
-}
-
-# ---------------------------------------------------------------------------------------
-# php_fpm_has_pid() - Checks if a PID file exists
-#
-# @global PHP_* The PHP_ environment variables
-# @return Returns false if no PID file exists
-#
-php_fpm_has_pid() {
-    if [[ ! -f "${PHP_TMP_PATH}/php-fpm.pid" ]]; then
-        false
-    fi
-}
-
-# ---------------------------------------------------------------------------------------
-# php_fpm_start() - Start PHP
-#
-# @global PHP_* The PHP_ environment variables
-# @return void
-#
-php_fpm_start() {
-    local pid
-
-    info "PHP-FPM: Starting ..."
-    "${PHP_BASE_PATH}/sbin/php-fpm" 2>&1 | (sed 's/^/PHP-FPM: /' | output) &
-    sleep 1
-
-    with_backoff "php_fpm_has_pid" || (error "PHP-FPM: Could not retrieve PID of the PHP-FPM process, maybe it failed during start-up?"; exit 1)
-    pid=$(php_fpm_get_pid)
-
-    info "PHP-FPM: Running as process #${pid}"
-}
-
-# ---------------------------------------------------------------------------------------
-# php_fpm_stop() - Stop the php process based on the current PID
-#
-# @global PHP_* The PHP_ evnironment variables
-# @return void
-#
-php_fpm_stop() {
-    local pid
-
-    pid=$(php_fpm_get_pid)
-    is_process_running "${pid}" || (info "PHP-FPM: Could not stop, because the process was not running (detected pid: ${pid})" && return);
-    info "PHP-FPM: Stopping ..."
-
-    process_stop "${pid}"
-
-    info "PHP-FPM: Process stopped, good-bye ... 👋"
-}
-
-# ---------------------------------------------------------------------------------------
 # php_fpm_conf_validate() - Validates configuration options passed as PHP_* env vars
 #
 # @global PHP_* The PHP_* environment variables
@@ -126,4 +60,7 @@ php_fpm_initialize() {
 
     info "PHP-FPM: Initializing configuration ..."
     envsubst < "${PHP_CONF_PATH}/php-fpm.conf.template" > "${PHP_CONF_PATH}/php-fpm.conf"
+
+    # Create a file descriptor for the PHP-FPM log output and clean up the log lines a bit:
+    exec 4> >(sed -e "s/^\([0-9\/-]* [0-9:,]*\)/\1     OUTPUT PHP-FPM:/")
  }

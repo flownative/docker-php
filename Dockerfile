@@ -17,6 +17,7 @@ ENV FLOWNATIVE_LIB_PATH="/opt/flownative/lib" \
     PATH="/opt/flownative/php/bin:$PATH" \
     LOG_DEBUG="true"
 
+USER root
 COPY --from=docker.pkg.github.com/flownative/bash-library/bash-library:1 /lib $FLOWNATIVE_LIB_PATH
 
 COPY root-files /
