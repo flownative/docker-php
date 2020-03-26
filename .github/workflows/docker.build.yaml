@@ -9,7 +9,7 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build-7_1:
+#  build-7_1:
 #    runs-on: ubuntu-latest
 #    env:
 #      PHP_VERSION: 7.1.33
