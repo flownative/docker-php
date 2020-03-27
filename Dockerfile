@@ -20,7 +20,10 @@ ENV FLOWNATIVE_LIB_PATH="/opt/flownative/lib" \
 USER root
 COPY --from=docker.pkg.github.com/flownative/bash-library/bash-library:1 /lib $FLOWNATIVE_LIB_PATH
 
-COPY root-files /
+COPY root-files/build.sh /
+COPY root-files/entrypoint.sh /
+COPY root-files/opt /
+COPY root-files/usr /
 
 RUN /build.sh init \
     && /build.sh prepare \
