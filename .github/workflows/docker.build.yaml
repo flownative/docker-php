@@ -37,7 +37,7 @@ jobs:
       - name: Tag semver releases
         uses: flownative/action-docker-publish-semver@v1
         with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
+          tag_ref: ${{ env.PHP_VERSION }}
           tag_latest: 'no'
 
           source_image_name: flownative/docker-php/php
@@ -85,7 +85,7 @@ jobs:
       - name: Tag semver releases
         uses: flownative/action-docker-publish-semver@v1
         with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
+          tag_ref: ${{ env.PHP_VERSION }}
           tag_latest: 'no'
 
           source_image_name: flownative/docker-php/php
@@ -133,7 +133,7 @@ jobs:
       - name: Tag semver releases
         uses: flownative/action-docker-publish-semver@v1
         with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
+          tag_ref: ${{ env.PHP_VERSION }}
           tag_latest: 'no'
 
           source_image_name: flownative/docker-php/php
@@ -181,7 +181,7 @@ jobs:
       - name: Tag semver releases
         uses: flownative/action-docker-publish-semver@v1
         with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
+          tag_ref: ${{ env.PHP_VERSION }}
           tag_latest: 'no'
 
           source_image_name: flownative/docker-php/php
