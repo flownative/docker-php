@@ -2,6 +2,7 @@
 
 ![](https://github.com/flownative/docker-beach-php/workflows/Build%20Docker%20Image/badge.svg)
 ![](https://github.com/flownative/docker-beach-php/workflows/Daily%20Releases/badge.svg)
+[![Maintenance level: Love](https://img.shields.io/badge/maintenance-%E2%99%A1%E2%99%A1%E2%99%A1-ff69b4.svg)](https://www.flownative.com/en/products/open-source.html)
 
 A Docker image providing [PHP-FPM](https://www.php.net/). Compared to
 other PHP images, this one is tailored to run without root privileges.
