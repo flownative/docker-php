@@ -12,18 +12,13 @@ LABEL org.label-schema.vendor="Flownative GmbH"
 ARG PHP_VERSION
 ENV PHP_VERSION ${PHP_VERSION}
 
-ENV FLOWNATIVE_LIB_PATH="/opt/flownative/lib" \
-    PHP_BASE_PATH="/opt/flownative/php" \
+ENV PHP_BASE_PATH="/opt/flownative/php" \
     PATH="/opt/flownative/php/bin:$PATH" \
     LOG_DEBUG="true"
 
 USER root
-COPY --from=docker.pkg.github.com/flownative/bash-library/bash-library:1 /lib $FLOWNATIVE_LIB_PATH
 
-COPY root-files/build.sh /
-COPY root-files/entrypoint.sh /
-COPY root-files/opt /
-COPY root-files/usr /
+COPY root-files /
 
 RUN /build.sh init \
     && /build.sh prepare \
