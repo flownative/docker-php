@@ -40,12 +40,12 @@ jobs:
           tag_ref: ${{ env.PHP_VERSION }}
           tag_latest: 'no'
 
-          source_image_name: flownative/docker-php/php
+          source_image_name: docker.pkg.github.com/flownative/docker-php/php
           source_registry_username: github
           source_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           source_registry_endpoint: https://docker.pkg.github.com/v2/
 
-          target_image_name: flownative/docker-php/php
+          target_image_name: docker.pkg.github.com/flownative/docker-php/php
           target_registry_username: github
           target_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           target_registry_endpoint: https://docker.pkg.github.com/v2/
@@ -88,12 +88,12 @@ jobs:
           tag_ref: ${{ env.PHP_VERSION }}
           tag_latest: 'no'
 
-          source_image_name: flownative/docker-php/php
+          source_image_name: docker.pkg.github.com/flownative/docker-php/php
           source_registry_username: github
           source_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           source_registry_endpoint: https://docker.pkg.github.com/v2/
 
-          target_image_name: flownative/docker-php/php
+          target_image_name: docker.pkg.github.com/flownative/docker-php/php
           target_registry_username: github
           target_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           target_registry_endpoint: https://docker.pkg.github.com/v2/
@@ -136,12 +136,12 @@ jobs:
           tag_ref: ${{ env.PHP_VERSION }}
           tag_latest: 'no'
 
-          source_image_name: flownative/docker-php/php
+          source_image_name: docker.pkg.github.com/flownative/docker-php/php
           source_registry_username: github
           source_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           source_registry_endpoint: https://docker.pkg.github.com/v2/
 
-          target_image_name: flownative/docker-php/php
+          target_image_name: docker.pkg.github.com/flownative/docker-php/php
           target_registry_username: github
           target_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           target_registry_endpoint: https://docker.pkg.github.com/v2/
@@ -184,12 +184,12 @@ jobs:
           tag_ref: ${{ env.PHP_VERSION }}
           tag_latest: 'no'
 
-          source_image_name: flownative/docker-php/php
+          source_image_name: docker.pkg.github.com/flownative/docker-php/php
           source_registry_username: github
           source_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           source_registry_endpoint: https://docker.pkg.github.com/v2/
 
-          target_image_name: flownative/docker-php/php
+          target_image_name: docker.pkg.github.com/flownative/docker-php/php
           target_registry_username: github
           target_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
           target_registry_endpoint: https://docker.pkg.github.com/v2/
