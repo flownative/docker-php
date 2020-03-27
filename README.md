@@ -110,6 +110,34 @@ docker build \
     -t flownative/php:latest .
 ```
 
-Check the latest stable release on the tool's respective websites:
+Check the latest stable release on [php.net](https://www.php.net).
 
-- PHP: https://www.php.net
+## Maintenance
+
+The Flownative images are built through Github Workflows. A new release
+build is triggered whenever a new Git tag is pushed to this repository.
+As usual, the tag must follow the syntax "v1.2.3+4". Note that the tag
+is used for the code of this repository and has nothing to do with an
+actual PHP version.
+
+### New PHP versions
+
+In order to produce images for a new PHP version, update the
+`PHP_VERSION` constants found in `.github/workflows/docker.build.yaml`,
+commit the result and push it along with a new tag. Note that, because
+you did not fix a bug or add a feature of the actual image code, you
+should only raise the build version number (ie. v1.2.0+1 becomes
+v1.2.0+2). The Github workflow will build images for all supported PHP
+branches, tag them and push them to the container registries at Github,
+Google and Docker Hub.
+
+### Nightly builds
+
+Each night, the images for the most recent version of each branch will
+be rebuilt using the latest Flownative base image (`flownative/base`).
+
+### Trigger
+
+Whenever new images were built, a custom event is triggered which in
+turn triggers builds of the `flownative/beach-php` image, which is
+derived from this one.
