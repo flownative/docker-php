@@ -209,10 +209,18 @@ jobs:
       - build-7_3
       - build-7_4
     steps:
-      - name: Dispatch
+      - name: Dispatch to beach-php
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.GITHUB_BOT_TOKEN }}
           repository: flownative/docker-beach-php
+          event-type: php-images-built
+          client-payload: '{"image_name": "flownative/docker-php/php"}'
+
+      - name: Dispatch to composer
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_BOT_TOKEN }}
+          repository: flownative/docker-composer
           event-type: php-images-built
           client-payload: '{"image_name": "flownative/docker-php/php"}'
