@@ -14,7 +14,7 @@ ENV PHP_VERSION ${PHP_VERSION}
 
 ENV PHP_BASE_PATH="/opt/flownative/php" \
     PATH="/opt/flownative/php/bin:$PATH" \
-    LOG_DEBUG="true"
+    LOG_DEBUG="false"
 
 USER root
 

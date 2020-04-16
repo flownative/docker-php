@@ -108,7 +108,7 @@ jobs:
   build-7_3:
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 7.3.16
+      PHP_VERSION: 7.3.17
     steps:
       - uses: actions/checkout@v2
         with:
