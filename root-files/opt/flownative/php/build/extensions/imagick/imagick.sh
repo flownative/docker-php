@@ -19,7 +19,6 @@ extensions_imagick_prepare() {
 #
 extensions_imagick_build_packages() {
     local packages="
-        file
         libmagickwand-dev
     "
     echo $packages

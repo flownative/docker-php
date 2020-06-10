@@ -29,6 +29,8 @@ export PHP_LOG_PATH="${PHP_LOG_PATH:-${PHP_BASE_PATH}/log}"
 export PHP_MEMORY_LIMIT="${PHP_MEMORY_LIMIT:-750M}"
 export PHP_DATE_TIMEZONE="${PHP_DATE_TIMEZONE:-}"
 
+export PHP_XDEBUG_ENABLE="${PHP_XDEBUG_ENABLE:-false}"
+
 export PHP_FPM_USER="1000"
 export PHP_FPM_GROUP="1000"
 export PHP_FPM_PORT="${PHP_FPM_PORT:-9000}"
@@ -60,6 +62,13 @@ php_fpm_initialize() {
 
     info "PHP-FPM: Initializing configuration ..."
     envsubst < "${PHP_CONF_PATH}/php-fpm.conf.template" > "${PHP_CONF_PATH}/php-fpm.conf"
+
+    if is_boolean_yes "${PHP_XDEBUG_ENABLE}"; then
+        info "PHP-FPM: Xdebug is enabled"
+    else
+        info "PHP-FPM: Xdebug is disabled"
+        rm -f "${PHP_CONF_PATH}/conf.d/php-ext-xdebug.ini"
+    fi
 
     # Create a file descriptor for the PHP-FPM log output and clean up the log lines a bit:
     exec 4> >(sed -e "s/^\([0-9\/-]* [0-9:,]*\)/\1     OUTPUT PHP-FPM:/")
