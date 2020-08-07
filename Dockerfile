@@ -28,6 +28,7 @@ RUN /build.sh init \
     && /build.sh build_extension yaml \
     && /build.sh build_extension phpredis \
     && /build.sh build_extension xdebug \
+    && /build.sh disable_extension xdebug \
     && /build.sh clean
 
 USER 1000

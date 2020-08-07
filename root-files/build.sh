@@ -29,7 +29,7 @@ build_create_directories() {
         "${PHP_BASE_PATH}/log"
 
     # Activate freetype-config-workaround (see freetype-config.sh):
-    ln -s ${PHP_BASE_PATH}/bin/freetype-config.sh /usr/local/bin/freetype-config;
+    ln -s ${PHP_BASE_PATH}/bin/freetype-config.sh /usr/local/bin/freetype-config
 }
 
 # ---------------------------------------------------------------------------------------
@@ -225,10 +225,10 @@ build_php_extension() {
     # Prepare variables
 
     local -r extension_name="${1:-missing extension name}"
-    local -r extension_build_configration_script="${PHP_BASE_PATH}/build/extensions/${extension_name}/${extension_name}.sh"
+    local -r extension_build_configuration_script="${PHP_BASE_PATH}/build/extensions/${extension_name}/${extension_name}.sh"
 
-    . "${extension_build_configration_script}" || (
-        error "Failed sourcing extension build configuration script from ${extension_build_configration_script}"
+    . "${extension_build_configuration_script}" || (
+        error "Failed sourcing extension build configuration script from ${extension_build_configuration_script}"
         exit 1
     )
 
@@ -345,6 +345,41 @@ build_php_extension() {
 }
 
 # ---------------------------------------------------------------------------------------
+# build_php_disable_extension() - Disable a previously installed extension
+#
+# @global PHP_BASE_PATH
+# @arg Extension name, e.g. "xdebug"
+# @return void
+#
+build_disable_php_extension() {
+
+    # -----------------------------------------------------------------------------------
+    # Prepare variables
+
+    local -r extension_name="${1:-missing extension name}"
+    local -r extension_build_configuration_script="${PHP_BASE_PATH}/build/extensions/${extension_name}/${extension_name}.sh"
+
+    . "${extension_build_configuration_script}" || (
+        error "Failed sourcing extension build configuration script from ${extension_build_configuration_script}"
+        exit 1
+    )
+
+    local -r extensions_dir="${PHP_BASE_PATH}/src/ext"
+    local -r extension_dir="${extensions_dir}/${extension_name}"
+    local -r extension_ini_path_and_filename="${PHP_BASE_PATH}/etc/conf.d/php-ext-${extension_name}.ini"
+
+    # -----------------------------------------------------------------------------------
+    # Deactivate extension's .ini file
+    info "🔌 ${extension_name}: Deactivating extension ..."
+
+    if [ -f "${extension_ini_path_and_filename}" ]; then
+        mv "${extension_ini_path_and_filename}" "${extension_ini_path_and_filename}.inactive"
+    else
+        error "🔌 ${extension_name}: ${extension_ini_path_and_filename} not found"
+    fi
+}
+
+# ---------------------------------------------------------------------------------------
 # build_adjust_permissions() - Adjust permissions for a few paths and files
 #
 # @global PHP_BASE_PATH
@@ -399,6 +434,9 @@ build)
     ;;
 build_extension)
     build_php_extension $2
+    ;;
+disable_extension)
+    build_disable_php_extension $2
     ;;
 clean)
     build_adjust_permissions

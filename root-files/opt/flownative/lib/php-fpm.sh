@@ -68,9 +68,9 @@ php_fpm_initialize() {
 
     if is_boolean_yes "${PHP_XDEBUG_ENABLE}"; then
         info "PHP-FPM: Xdebug is enabled"
+        mv "${PHP_CONF_PATH}/conf.d/php-ext-xdebug.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-xdebug.ini"
     else
         info "PHP-FPM: Xdebug is disabled"
-        rm -f "${PHP_CONF_PATH}/conf.d/php-ext-xdebug.ini"
     fi
 
     # Create a file descriptor for the PHP-FPM log output and clean up the log lines a bit:
