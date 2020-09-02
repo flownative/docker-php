@@ -20,7 +20,8 @@ USER root
 
 COPY root-files /
 
-RUN /build.sh init \
+RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
+    && /build.sh init \
     && /build.sh prepare \
     && /build.sh build \
     && /build.sh build_extension vips \
