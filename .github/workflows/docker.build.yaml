@@ -60,7 +60,7 @@ jobs:
   build-7_2:
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 7.2.33
+      PHP_VERSION: 7.2.34
     steps:
       - uses: actions/checkout@v2
         with:
@@ -108,7 +108,7 @@ jobs:
   build-7_3:
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 7.3.22
+      PHP_VERSION: 7.3.23
     steps:
       - uses: actions/checkout@v2
         with:
@@ -156,7 +156,7 @@ jobs:
   build-7_4:
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 7.4.10
+      PHP_VERSION: 7.4.11
     steps:
       - uses: actions/checkout@v2
         with:
