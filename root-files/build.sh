@@ -48,6 +48,7 @@ build_get_build_packages() {
         file
         pkg-config
         re2c
+        unzip
 
         libcurl4-openssl-dev
         libfreetype6-dev
@@ -80,6 +81,7 @@ build_get_runtime_packages() {
         libcurl4
         libonig5
         libreadline7
+        libsodium-dev
         libssl1.1
         libzip4
         libncurses6
@@ -137,8 +139,8 @@ build_compile_php() {
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
 
-    if [[ "${PHP_VERSION}" =~ ^7.[1-3] ]]; then
-        info "🛠 Running configure for PHP 7.3 or lower ..."
+    if [[ "${PHP_VERSION}" =~ ^7.1 ]]; then
+        info "🛠 Running configure for PHP 7.1 ..."
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
@@ -168,8 +170,70 @@ build_compile_php() {
             --with-zlib \
             --without-pear \
             >$(debug_device)
+    elif [[ "${PHP_VERSION}" =~ ^7.[2-3] ]]; then
+        info "🛠 Running configure for PHP ${PHP_VERSION} ..."
+        ./configure \
+            --prefix=${PHP_BASE_PATH} \
+            --with-config-file-path="${PHP_BASE_PATH}/etc" \
+            --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
+            --disable-cgi \
+            --enable-calendar \
+            --enable-exif \
+            --enable-fpm \
+            --enable-ftp \
+            --enable-intl \
+            --enable-mbstring \
+            --enable-pcntl \
+            --enable-soap \
+            --enable-zip \
+            --with-curl \
+            --with-freetype-dir=/usr/include \
+            --with-gd \
+            --with-gmp \
+            --with-jpeg-dir=/usr/include \
+            --with-mysqli \
+            --with-openssl \
+            --with-pdo-mysql \
+            --with-png-dir=/usr/include \
+            --with-readline \
+            --with-sodium \
+            --with-system-ciphers \
+            --with-webp-dir=/usr/include \
+            --with-zlib \
+            --without-pear \
+            >$(debug_device)
     elif [[ "${PHP_VERSION}" =~ ^7.4 ]]; then
         info "🛠 Running configure for PHP 7.4 ..."
+        ./configure \
+            --prefix=${PHP_BASE_PATH} \
+            --with-config-file-path="${PHP_BASE_PATH}/etc" \
+            --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
+            --disable-cgi \
+            --enable-calendar \
+            --enable-exif \
+            --enable-fpm \
+            --enable-ftp \
+            --enable-gd \
+            --enable-intl \
+            --enable-mbstring \
+            --enable-pcntl \
+            --enable-soap \
+            --with-curl \
+            --with-freetype \
+            --with-gmp \
+            --with-jpeg \
+            --with-mysqli \
+            --with-openssl \
+            --with-pdo-mysql \
+            --with-readline \
+            --with-sodium \
+            --with-system-ciphers \
+            --with-webp \
+            --with-zip \
+            --with-zlib \
+            --without-pear \
+            >$(debug_device)
+    elif [[ "${PHP_VERSION}" =~ ^8.0 ]]; then
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
