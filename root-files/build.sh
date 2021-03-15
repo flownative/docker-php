@@ -482,7 +482,7 @@ case $1 in
 init)
     banner_flownative 'PHP'
 
-    if [[ ! "${PHP_VERSION}" =~ ^7.[1-4] ]]; then
+    if [[ ! "${PHP_VERSION}" =~ ^7.[1-4]|^8.0 ]]; then
         error "🛠 Unsupported PHP version '${PHP_VERSION}'"
         exit 1
     fi
