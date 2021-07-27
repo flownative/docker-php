@@ -204,7 +204,7 @@ jobs:
   build-8_0:
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 8.0.3
+      PHP_VERSION: 8.0.8
     steps:
       - uses: actions/checkout@v2
         with:
