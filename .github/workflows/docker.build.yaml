@@ -256,6 +256,7 @@ jobs:
       - build-7_2
       - build-7_3
       - build-7_4
+      - build-8_0
     steps:
       - name: Dispatch to beach-php
         uses: peter-evans/repository-dispatch@v1
