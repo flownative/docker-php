@@ -15,7 +15,7 @@ jobs:
 
           source_image_name: ${{ github.event.client_payload.image_name }}
           source_registry_username: github
-          source_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
+          source_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
           source_registry_endpoint: https://docker.pkg.github.com/v2/
 
           target_image_name: eu.gcr.io/flownative-beach/php
@@ -31,7 +31,7 @@ jobs:
 
           source_image_name: ${{ github.event.client_payload.image_name }}
           source_registry_username: github
-          source_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
+          source_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
           source_registry_endpoint: https://docker.pkg.github.com/v2/
 
           target_image_name: eu.gcr.io/flownative-beach-a7c8b2/php
@@ -50,7 +50,7 @@ jobs:
 
           source_image_name: ${{ github.event.client_payload.image_name }}
           source_registry_username: github
-          source_registry_password: ${{ secrets.GITHUB_BOT_TOKEN }}
+          source_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
           source_registry_endpoint: https://docker.pkg.github.com/v2/
 
           target_image_name: flownative/php

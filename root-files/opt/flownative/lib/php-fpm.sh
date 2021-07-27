@@ -16,7 +16,7 @@
 # ---------------------------------------------------------------------------------------
 # php_fpm_env() - Load global environment variables for configuring PHP
 #
-# @global PHP_* The PHP_ evnironment variables
+# @global PHP_* The PHP_ environment variables
 # @return "export" statements which can be passed to eval()
 #
 php_fpm_env() {
