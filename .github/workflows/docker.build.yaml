@@ -9,54 +9,6 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build-7_1:
-    runs-on: ubuntu-latest
-    env:
-      PHP_VERSION: 7.1.33
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: 'master'
-          fetch-depth: 100
-
-      - name: Determine latest released version
-        id: latest_version
-        uses: flownative/action-git-latest-release@master
-
-      - name: Build Docker image
-        id: build_image
-        uses: flownative/action-docker-build@v1
-        with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
-          image_name: flownative/docker-php/php
-          image_tag: ${{ env.PHP_VERSION }}
-          git_repository_url: https://github.com/${{ github.repository }}
-          git_sha: ${{ github.sha }}
-          registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-
-      - name: Tag semver releases
-        uses: flownative/action-docker-publish-semver@v1
-        with:
-          tag_ref: ${{ env.PHP_VERSION }}
-          tag_latest: 'no'
-
-          source_image_name: docker.pkg.github.com/flownative/docker-php/php
-          source_registry_username: github
-          source_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          source_registry_endpoint: https://docker.pkg.github.com/v2/
-
-          target_image_name: docker.pkg.github.com/flownative/docker-php/php
-          target_registry_username: github
-          target_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          target_registry_endpoint: https://docker.pkg.github.com/v2/
-
-      - name: Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "7.1"}'
-
   build-7_2:
     runs-on: ubuntu-latest
     env:
@@ -252,7 +204,6 @@ jobs:
   announce:
     runs-on: ubuntu-latest
     needs:
-      - build-7_1
       - build-7_2
       - build-7_3
       - build-7_4
