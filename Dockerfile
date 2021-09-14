@@ -1,4 +1,4 @@
-FROM docker.pkg.github.com/flownative/docker-base/base:buster
+FROM europe-docker.pkg.dev/flownative/docker/base:buster
 MAINTAINER Robert Lemke <robert@flownative.com>
 
 LABEL org.label-schema.name="PHP"

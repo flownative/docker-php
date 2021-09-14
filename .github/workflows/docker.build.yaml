@@ -1,7 +1,5 @@
-name: Build Docker images
+name: Build Docker Image
 on:
-  schedule:
-    - cron: '30 0 * * *'
   push:
     branches-ignore:
       - '**'
@@ -9,102 +7,6 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build-7_2:
-    runs-on: ubuntu-latest
-    env:
-      PHP_VERSION: 7.2.34
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: 'master'
-          fetch-depth: 100
-
-      - name: Determine latest released version
-        id: latest_version
-        uses: flownative/action-git-latest-release@master
-
-      - name: Build Docker image
-        id: build_image
-        uses: flownative/action-docker-build@v1
-        with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
-          image_name: flownative/docker-php/php
-          image_tag: ${{ env.PHP_VERSION }}
-          git_repository_url: https://github.com/${{ github.repository }}
-          git_sha: ${{ github.sha }}
-          registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-
-      - name: Tag semver releases
-        uses: flownative/action-docker-publish-semver@v1
-        with:
-          tag_ref: ${{ env.PHP_VERSION }}
-          tag_latest: 'no'
-
-          source_image_name: docker.pkg.github.com/flownative/docker-php/php
-          source_registry_username: github
-          source_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          source_registry_endpoint: https://docker.pkg.github.com/v2/
-
-          target_image_name: docker.pkg.github.com/flownative/docker-php/php
-          target_registry_username: github
-          target_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          target_registry_endpoint: https://docker.pkg.github.com/v2/
-
-      - name: Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "7.2"}'
-
-  build-7_3:
-    runs-on: ubuntu-latest
-    env:
-      PHP_VERSION: 7.3.30
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: 'master'
-          fetch-depth: 100
-
-      - name: Determine latest released version
-        id: latest_version
-        uses: flownative/action-git-latest-release@master
-
-      - name: Build Docker image
-        id: build_image
-        uses: flownative/action-docker-build@v1
-        with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
-          image_name: flownative/docker-php/php
-          image_tag: ${{ env.PHP_VERSION }}
-          git_repository_url: https://github.com/${{ github.repository }}
-          git_sha: ${{ github.sha }}
-          registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-
-      - name: Tag semver releases
-        uses: flownative/action-docker-publish-semver@v1
-        with:
-          tag_ref: ${{ env.PHP_VERSION }}
-          tag_latest: 'no'
-
-          source_image_name: docker.pkg.github.com/flownative/docker-php/php
-          source_registry_username: github
-          source_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          source_registry_endpoint: https://docker.pkg.github.com/v2/
-
-          target_image_name: docker.pkg.github.com/flownative/docker-php/php
-          target_registry_username: github
-          target_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          target_registry_endpoint: https://docker.pkg.github.com/v2/
-
-      - name: Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "7.3"}'
-
   build-7_4:
     runs-on: ubuntu-latest
     env:
@@ -115,112 +17,53 @@ jobs:
           ref: 'master'
           fetch-depth: 100
 
-      - name: Determine latest released version
+      - name: Determine latest version
         id: latest_version
         uses: flownative/action-git-latest-release@master
 
-      - name: Build Docker image
-        id: build_image
-        uses: flownative/action-docker-build@v1
-        with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
-          image_name: flownative/docker-php/php
-          image_tag: ${{ env.PHP_VERSION }}
-          git_repository_url: https://github.com/${{ github.repository }}
-          git_sha: ${{ github.sha }}
-          registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
+      - run: |
+          sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
 
-      - name: Tag semver releases
-        uses: flownative/action-docker-publish-semver@v1
-        with:
-          tag_ref: ${{ env.PHP_VERSION }}
-          tag_latest: 'no'
-
-          source_image_name: docker.pkg.github.com/flownative/docker-php/php
-          source_registry_username: github
-          source_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          source_registry_endpoint: https://docker.pkg.github.com/v2/
-
-          target_image_name: docker.pkg.github.com/flownative/docker-php/php
-          target_registry_username: github
-          target_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          target_registry_endpoint: https://docker.pkg.github.com/v2/
-
-      - name: Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "7.4"}'
-
-  build-8_0:
-    runs-on: ubuntu-latest
-    env:
-      PHP_VERSION: 8.0.10
-    steps:
       - uses: actions/checkout@v2
         with:
-          ref: 'master'
+          ref: ${{ steps.latest_version.outputs.tag }}
           fetch-depth: 100
 
-      - name: Determine latest released version
-        id: latest_version
-        uses: flownative/action-git-latest-release@master
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+
+      -
+        name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_IO_REGISTRY_USER }}
+          password: ${{ secrets.DOCKER_IO_REGISTRY_PASSWORD }}
+
+      - name: Login to Google Artifacts Registry
+        uses: docker/login-action@v1
+        with:
+          registry: europe-docker.pkg.dev/flownative/docker
+          username: '_json_key'
+          password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
 
       - name: Build Docker image
-        id: build_image
-        uses: flownative/action-docker-build@v1
+        uses: docker/build-push-action@v2
         with:
-          tag_ref: ${{ steps.latest_version.outputs.tag }}
-          image_name: flownative/docker-php/php
-          image_tag: ${{ env.PHP_VERSION }}
-          git_repository_url: https://github.com/${{ github.repository }}
-          git_sha: ${{ github.sha }}
-          registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-
-      - name: Tag semver releases
-        uses: flownative/action-docker-publish-semver@v1
-        with:
-          tag_ref: ${{ env.PHP_VERSION }}
-          tag_latest: 'no'
-
-          source_image_name: docker.pkg.github.com/flownative/docker-php/php
-          source_registry_username: github
-          source_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          source_registry_endpoint: https://docker.pkg.github.com/v2/
-
-          target_image_name: docker.pkg.github.com/flownative/docker-php/php
-          target_registry_username: github
-          target_registry_password: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          target_registry_endpoint: https://docker.pkg.github.com/v2/
-
-      - name: Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          event-type: image-built
-          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.build_image.outputs.image_tag }}", "php_version": "${{ env.PHP_VERSION }}", "php_version_minor": "8.0"}'
-
-  announce:
-    runs-on: ubuntu-latest
-    needs:
-      - build-7_2
-      - build-7_3
-      - build-7_4
-      - build-8_0
-    steps:
-      - name: Dispatch to beach-php
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          repository: flownative/docker-beach-php
-          event-type: php-images-built
-          client-payload: '{"image_name": "flownative/docker-php/php"}'
-
-      - name: Dispatch to composer
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          repository: flownative/docker-composer
-          event-type: php-images-built
-          client-payload: '{"image_name": "flownative/docker-php/php"}'
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            flownative/php:${{ steps.latest_version.outputs.version }}
+            europe-docker.pkg.dev/flownative/docker/php:${{ steps.latest_version.outputs.version }}
+#
+#      - name: Dispatch
+#        uses: peter-evans/repository-dispatch@v1
+#        with:
+#          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
+#          event-type: image-built
+#          client-payload: '{"image_name": "${{ steps.build_image.outputs.image_name }}", "image_tag": "${{ steps.latest_version.outputs.version }}"}'
