@@ -1,10 +1,6 @@
 FROM europe-docker.pkg.dev/flownative/docker/base:buster
 MAINTAINER Robert Lemke <robert@flownative.com>
 
-LABEL org.label-schema.name="PHP"
-LABEL org.label-schema.description="Docker image providing PHP-FPM or just PHP"
-LABEL org.label-schema.vendor="Flownative GmbH"
-
 # -----------------------------------------------------------------------------
 # PHP
 # Latest versions: https://www.php.net/downloads.php

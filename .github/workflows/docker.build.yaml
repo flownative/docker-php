@@ -10,6 +10,8 @@ on:
 
 jobs:
   build-7_2:
+    env:
+      PHP_VERSION: 7.2.34
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -28,6 +30,24 @@ jobs:
         with:
           ref: ${{ steps.latest_version.outputs.tag }}
           fetch-depth: 100
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          flavor: |
+            latest=false
+          images: |
+            flownative/php
+            europe-docker.pkg.dev/flownative/docker/php
+          labels: |
+            org.opencontainers.image.title=PHP
+            org.opencontainers.image.description=Docker image providing PHP-FPM or just PHP
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.vendor=Flownative GmbH
+          tags: |
+            type=semver,pattern={{major}}.{{minor}},value=${{ env.PHP_VERSION }}
+            type=semver,pattern={{version}},value=${{ env.PHP_VERSION }}
 
       - name: Set up QEMU
         id: qemu
@@ -55,204 +75,201 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           build-args: |
-            PHP_VERSION=7.2.34
-          tags: |
-            flownative/php:7.2.34
-            flownative/php:7.2
-            europe-docker.pkg.dev/flownative/docker/php:7.2.34
-            europe-docker.pkg.dev/flownative/docker/php:7.2
+            PHP_VERSION=${{ env.PHP_VERSION }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
-  build-7_3:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: 'main'
-          fetch-depth: 100
-
-      - name: Determine latest version
-        id: latest_version
-        uses: flownative/action-git-latest-release@master
-
-      - run: |
-          sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
-
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.latest_version.outputs.tag }}
-          fetch-depth: 100
-
-      - name: Set up QEMU
-        id: qemu
-        uses: docker/setup-qemu-action@v1
-
-      -
-        name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_IO_REGISTRY_USER }}
-          password: ${{ secrets.DOCKER_IO_REGISTRY_PASSWORD }}
-
-      - name: Login to Google Artifacts Registry
-        uses: docker/login-action@v1
-        with:
-          registry: europe-docker.pkg.dev/flownative/docker
-          username: '_json_key'
-          password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
-
-      - name: Build Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          build-args: |
-            PHP_VERSION=7.3.31
-          tags: |
-            flownative/php:7.3.31
-            flownative/php:7.3
-            europe-docker.pkg.dev/flownative/docker/php:7.3.31
-            europe-docker.pkg.dev/flownative/docker/php:7.3
-
-  build-7_4:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: 'main'
-          fetch-depth: 100
-
-      - name: Determine latest version
-        id: latest_version
-        uses: flownative/action-git-latest-release@master
-
-      - run: |
-          sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
-
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.latest_version.outputs.tag }}
-          fetch-depth: 100
-
-      - name: Set up QEMU
-        id: qemu
-        uses: docker/setup-qemu-action@v1
-
-      -
-        name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_IO_REGISTRY_USER }}
-          password: ${{ secrets.DOCKER_IO_REGISTRY_PASSWORD }}
-
-      - name: Login to Google Artifacts Registry
-        uses: docker/login-action@v1
-        with:
-          registry: europe-docker.pkg.dev/flownative/docker
-          username: '_json_key'
-          password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
-
-      - name: Build Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          build-args: |
-            PHP_VERSION=7.4.24
-          tags: |
-            flownative/php:7.4.24
-            flownative/php:7.4
-            europe-docker.pkg.dev/flownative/docker/php:7.4.24
-            europe-docker.pkg.dev/flownative/docker/php:7.4
-
-  build-8_0:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: 'main'
-          fetch-depth: 100
-
-      - name: Determine latest version
-        id: latest_version
-        uses: flownative/action-git-latest-release@master
-
-      - run: |
-          sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
-
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.latest_version.outputs.tag }}
-          fetch-depth: 100
-
-      - name: Set up QEMU
-        id: qemu
-        uses: docker/setup-qemu-action@v1
-
-      -
-        name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_IO_REGISTRY_USER }}
-          password: ${{ secrets.DOCKER_IO_REGISTRY_PASSWORD }}
-
-      - name: Login to Google Artifacts Registry
-        uses: docker/login-action@v1
-        with:
-          registry: europe-docker.pkg.dev/flownative/docker
-          username: '_json_key'
-          password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
-
-      - name: Build Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          build-args: |
-            PHP_VERSION=8.0.11
-          tags: |
-            flownative/php:8.0.11
-            flownative/php:8.0
-            europe-docker.pkg.dev/flownative/docker/php:8.0.11
-            europe-docker.pkg.dev/flownative/docker/php:8.0
-
-  announce:
-    runs-on: ubuntu-latest
-    needs:
-      - build-7_2
-      - build-7_3
-      - build-7_4
-      - build-8_0
-    steps:
-      - name: Dispatch to beach-php
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          repository: flownative/docker-beach-php
-          event-type: php-images-built
-          client-payload: '{"image_name": "flownative/docker-php/php"}'
-
-      - name: Dispatch to composer
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
-          repository: flownative/docker-composer
-          event-type: php-images-built
-          client-payload: '{"image_name": "flownative/docker-php/php"}'
+#  build-7_3:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: 'main'
+#          fetch-depth: 100
+#
+#      - name: Determine latest version
+#        id: latest_version
+#        uses: flownative/action-git-latest-release@master
+#
+#      - run: |
+#          sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
+#
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: ${{ steps.latest_version.outputs.tag }}
+#          fetch-depth: 100
+#
+#      - name: Set up QEMU
+#        id: qemu
+#        uses: docker/setup-qemu-action@v1
+#
+#      -
+#        name: Set up Docker Buildx
+#        id: buildx
+#        uses: docker/setup-buildx-action@v1
+#
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v1
+#        with:
+#          username: ${{ secrets.DOCKER_IO_REGISTRY_USER }}
+#          password: ${{ secrets.DOCKER_IO_REGISTRY_PASSWORD }}
+#
+#      - name: Login to Google Artifacts Registry
+#        uses: docker/login-action@v1
+#        with:
+#          registry: europe-docker.pkg.dev/flownative/docker
+#          username: '_json_key'
+#          password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
+#
+#      - name: Build Docker image
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: .
+#          platforms: linux/amd64,linux/arm64
+#          push: true
+#          build-args: |
+#            PHP_VERSION=7.3.31
+#          tags: |
+#            flownative/php:7.3.31
+#            flownative/php:7.3
+#            europe-docker.pkg.dev/flownative/docker/php:7.3.31
+#            europe-docker.pkg.dev/flownative/docker/php:7.3
+#
+#  build-7_4:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: 'main'
+#          fetch-depth: 100
+#
+#      - name: Determine latest version
+#        id: latest_version
+#        uses: flownative/action-git-latest-release@master
+#
+#      - run: |
+#          sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
+#
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: ${{ steps.latest_version.outputs.tag }}
+#          fetch-depth: 100
+#
+#      - name: Set up QEMU
+#        id: qemu
+#        uses: docker/setup-qemu-action@v1
+#
+#      -
+#        name: Set up Docker Buildx
+#        id: buildx
+#        uses: docker/setup-buildx-action@v1
+#
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v1
+#        with:
+#          username: ${{ secrets.DOCKER_IO_REGISTRY_USER }}
+#          password: ${{ secrets.DOCKER_IO_REGISTRY_PASSWORD }}
+#
+#      - name: Login to Google Artifacts Registry
+#        uses: docker/login-action@v1
+#        with:
+#          registry: europe-docker.pkg.dev/flownative/docker
+#          username: '_json_key'
+#          password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
+#
+#      - name: Build Docker image
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: .
+#          platforms: linux/amd64,linux/arm64
+#          push: true
+#          build-args: |
+#            PHP_VERSION=7.4.24
+#          tags: |
+#            flownative/php:7.4.24
+#            flownative/php:7.4
+#            europe-docker.pkg.dev/flownative/docker/php:7.4.24
+#            europe-docker.pkg.dev/flownative/docker/php:7.4
+#
+#  build-8_0:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: 'main'
+#          fetch-depth: 100
+#
+#      - name: Determine latest version
+#        id: latest_version
+#        uses: flownative/action-git-latest-release@master
+#
+#      - run: |
+#          sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
+#
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: ${{ steps.latest_version.outputs.tag }}
+#          fetch-depth: 100
+#
+#      - name: Set up QEMU
+#        id: qemu
+#        uses: docker/setup-qemu-action@v1
+#
+#      -
+#        name: Set up Docker Buildx
+#        id: buildx
+#        uses: docker/setup-buildx-action@v1
+#
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v1
+#        with:
+#          username: ${{ secrets.DOCKER_IO_REGISTRY_USER }}
+#          password: ${{ secrets.DOCKER_IO_REGISTRY_PASSWORD }}
+#
+#      - name: Login to Google Artifacts Registry
+#        uses: docker/login-action@v1
+#        with:
+#          registry: europe-docker.pkg.dev/flownative/docker
+#          username: '_json_key'
+#          password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
+#
+#      - name: Build Docker image
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: .
+#          platforms: linux/amd64,linux/arm64
+#          push: true
+#          build-args: |
+#            PHP_VERSION=8.0.11
+#          tags: |
+#            flownative/php:8.0.11
+#            flownative/php:8.0
+#            europe-docker.pkg.dev/flownative/docker/php:8.0.11
+#            europe-docker.pkg.dev/flownative/docker/php:8.0
+#
+#  announce:
+#    runs-on: ubuntu-latest
+#    needs:
+#      - build-7_2
+#      - build-7_3
+#      - build-7_4
+#      - build-8_0
+#    steps:
+#      - name: Dispatch to beach-php
+#        uses: peter-evans/repository-dispatch@v1
+#        with:
+#          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
+#          repository: flownative/docker-beach-php
+#          event-type: php-images-built
+#          client-payload: '{"image_name": "flownative/docker-php/php"}'
+#
+#      - name: Dispatch to composer
+#        uses: peter-evans/repository-dispatch@v1
+#        with:
+#          token: ${{ secrets.FLOWNATIVE_BOT_TOKEN }}
+#          repository: flownative/docker-composer
+#          event-type: php-images-built
+#          client-payload: '{"image_name": "flownative/docker-php/php"}'
