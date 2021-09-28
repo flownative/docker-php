@@ -42,9 +42,10 @@ jobs:
             europe-docker.pkg.dev/flownative/docker/php
           labels: |
             org.opencontainers.image.title=PHP
-            org.opencontainers.image.description=Docker image providing PHP-FPM or just PHP
+            org.opencontainers.image.description=Docker image providing PHP CLI and PHP-FPM with various extensions pre-installed
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.vendor=Flownative GmbH
+            org.opencontainers.image.version=${{ env.PHP_VERSION }}
           tags: |
             type=semver,pattern={{major}}.{{minor}},value=${{ env.PHP_VERSION }}
             type=semver,pattern={{version}},value=${{ env.PHP_VERSION }}
