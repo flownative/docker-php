@@ -61,6 +61,7 @@ build_get_build_packages() {
         libonig-dev
         libpng-dev
         libpspell-dev
+        libpq-dev
         libreadline6-dev
         libsqlite3-dev
         libssl-dev
@@ -80,6 +81,7 @@ build_get_runtime_packages() {
     local packages="
         libcurl4
         libonig5
+        libpq5
         libreadline7
         libsodium-dev
         libssl1.1
@@ -154,6 +156,7 @@ build_compile_php() {
             --enable-mbstring \
             --enable-pcntl \
             --enable-soap \
+            --enable-sockets \
             --enable-zip \
             --with-curl \
             --with-freetype-dir=/usr/include \
@@ -162,6 +165,7 @@ build_compile_php() {
             --with-jpeg-dir=/usr/include \
             --with-mysqli \
             --with-openssl \
+            --with-pdo-pgsql \
             --with-pdo-mysql \
             --with-png-dir=/usr/include \
             --with-readline \
@@ -185,6 +189,7 @@ build_compile_php() {
             --enable-mbstring \
             --enable-pcntl \
             --enable-soap \
+            --enable-sockets \
             --enable-zip \
             --with-curl \
             --with-freetype-dir=/usr/include \
@@ -193,6 +198,7 @@ build_compile_php() {
             --with-jpeg-dir=/usr/include \
             --with-mysqli \
             --with-openssl \
+            --with-pdo-pgsql \
             --with-pdo-mysql \
             --with-png-dir=/usr/include \
             --with-readline \
@@ -218,12 +224,14 @@ build_compile_php() {
             --enable-mbstring \
             --enable-pcntl \
             --enable-soap \
+            --enable-sockets \
             --with-curl \
             --with-freetype \
             --with-gmp \
             --with-jpeg \
             --with-mysqli \
             --with-openssl \
+            --with-pdo-pgsql \
             --with-pdo-mysql \
             --with-readline \
             --with-sodium \
@@ -248,12 +256,14 @@ build_compile_php() {
             --enable-mbstring \
             --enable-pcntl \
             --enable-soap \
+            --enable-sockets \
             --with-curl \
             --with-freetype \
             --with-gmp \
             --with-jpeg \
             --with-mysqli \
             --with-openssl \
+            --with-pdo-pgsql \
             --with-pdo-mysql \
             --with-readline \
             --with-system-ciphers \
