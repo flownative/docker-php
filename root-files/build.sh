@@ -272,6 +272,37 @@ build_compile_php() {
             --with-zlib \
             --without-pear \
             >$(debug_device)
+    elif [[ "${PHP_VERSION}" =~ ^8.1 ]]; then
+        ./configure \
+            --prefix=${PHP_BASE_PATH} \
+            --with-config-file-path="${PHP_BASE_PATH}/etc" \
+            --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
+            --disable-cgi \
+            --enable-calendar \
+            --enable-exif \
+            --enable-fpm \
+            --enable-ftp \
+            --enable-gd \
+            --enable-intl \
+            --enable-mbstring \
+            --enable-pcntl \
+            --enable-soap \
+            --enable-sockets \
+            --with-curl \
+            --with-freetype \
+            --with-gmp \
+            --with-jpeg \
+            --with-mysqli \
+            --with-openssl \
+            --with-pdo-pgsql \
+            --with-pdo-mysql \
+            --with-readline \
+            --with-system-ciphers \
+            --with-webp \
+            --with-zip \
+            --with-zlib \
+            --without-pear \
+            >$(debug_device)
     else
         error "🛠 Unsupported PHP version ${PHP_VERSION}"
         exit 1
@@ -492,7 +523,7 @@ case $1 in
 init)
     banner_flownative 'PHP'
 
-    if [[ ! "${PHP_VERSION}" =~ ^7.[1-4]|^8.0 ]]; then
+    if [[ ! "${PHP_VERSION}" =~ ^7.[1-4]|^8.[0-1] ]]; then
         error "🛠 Unsupported PHP version '${PHP_VERSION}'"
         exit 1
     fi
