@@ -1,6 +1,5 @@
-FROM europe-docker.pkg.dev/flownative/docker/base:bullseye
-
-LABEL org.opencontainers.image.authors="Robert Lemke <robert@flownative.com>"
+FROM europe-docker.pkg.dev/flownative/docker/base:buster
+MAINTAINER Robert Lemke <robert@flownative.com>
 
 # -----------------------------------------------------------------------------
 # PHP

@@ -82,7 +82,7 @@ build_get_runtime_packages() {
         libcurl4
         libonig5
         libpq5
-        libreadline8
+        libreadline7
         libsodium-dev
         libssl1.1
         libzip4
