@@ -153,7 +153,6 @@ build_compile_php() {
             --enable-fpm \
             --enable-ftp \
             --enable-gd \
-            --enable-igbinary \
             --enable-intl \
             --enable-mbstring \
             --enable-pcntl \
@@ -186,7 +185,6 @@ build_compile_php() {
             --enable-fpm \
             --enable-ftp \
             --enable-gd \
-            --enable-igbinary \
             --enable-intl \
             --enable-mbstring \
             --enable-pcntl \
