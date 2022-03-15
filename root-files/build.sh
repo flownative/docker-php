@@ -199,6 +199,7 @@ build_compile_php() {
             --with-pdo-pgsql \
             --with-pdo-mysql \
             --with-readline \
+            --with-sodium \
             --with-system-ciphers \
             --with-webp \
             --with-zip \
