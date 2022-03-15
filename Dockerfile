@@ -22,6 +22,7 @@ RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
     && /build.sh prepare \
     && /build.sh build \
     && /build.sh build_extension vips \
+    && /build.sh build_extension igbinary \
     && /build.sh build_extension imagick \
     && /build.sh build_extension yaml \
     && /build.sh build_extension phpredis \
