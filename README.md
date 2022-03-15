@@ -75,6 +75,7 @@ similar mechanism in Kubernetes or your actual platform.
 | PHP_MEMORY_LIMIT     | string  | 750M                | PHP memory limit ([doc](https://www.php.net/manual/en/ini.core.php#ini.memory-limit))                                      |
 | PHP_OPCACHE_PRELOAD  | string  |                     | Path and filename of a preload script ([doc](https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.preload)) |
 | PHP_XDEBUG_ENABLE    | boolean | false               | Enable or disable the Xdebug extension                                                                                     |
+| PHP_IGBINARY_ENABLE  | boolean | false               | Enable or disable the igbinary extension                                                                                   |
 | PHP_FPM_USER         | string  | 1000                | User id for running PHP (read-only)                                                                                        |
 | PHP_FPM_GROUP        | string  | 1000                | Group id for running PHP (read-only)                                                                                       |
 | PHP_FPM_PORT         | string  | 9000                | Port the PHP-FPM process listens to                                                                                        |

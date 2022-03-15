@@ -95,11 +95,11 @@ build_get_runtime_packages() {
 }
 
 # ---------------------------------------------------------------------------------------
-# build_get_unneccessary_packages() - Not needed packages, can be removed
+# build_get_unnecessary_packages() - Not needed packages, can be removed
 #
 # @return List of packages
 #
-build_get_unneccessary_packages() {
+build_get_unnecessary_packages() {
     local packages="
         cmake
    "
@@ -450,7 +450,7 @@ clean)
     build_adjust_permissions
 
     packages_remove $(build_get_build_packages) 1>$(debug_device)
-    packages_remove $(build_get_unneccessary_packages) 1>$(debug_device)
+    packages_remove $(build_get_unnecessary_packages) 1>$(debug_device)
     packages_remove_docs_and_caches 1>$(debug_device)
     build_clean
     ;;

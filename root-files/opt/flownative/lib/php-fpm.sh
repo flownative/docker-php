@@ -34,6 +34,7 @@ export PHP_ERROR_LOG="${PHP_ERROR_LOG:-/dev/stderr}"
 export PHP_OPCACHE_PRELOAD="${PHP_OPCACHE_PRELOAD:-}"
 
 export PHP_XDEBUG_ENABLE="${PHP_XDEBUG_ENABLE:-false}"
+export PHP_IGBINARY_ENABLE="${PHP_IGBINARY_ENABLE:-false}"
 
 export PHP_FPM_USER="1000"
 export PHP_FPM_GROUP="1000"
@@ -72,6 +73,13 @@ php_fpm_initialize() {
         mv "${PHP_CONF_PATH}/conf.d/php-ext-xdebug.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-xdebug.ini"
     else
         info "PHP-FPM: Xdebug is disabled"
+    fi
+
+    if is_boolean_yes "${PHP_IGBINARY_ENABLE}"; then
+        info "PHP-FPM: igbinary is enabled"
+        mv "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini"
+    else
+        info "PHP-FPM: igbinary is disabled"
     fi
 
     # Create a file descriptor for the PHP-FPM log output and clean up the log lines a bit:
