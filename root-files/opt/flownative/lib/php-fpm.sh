@@ -76,8 +76,11 @@ php_fpm_initialize() {
     fi
 
     if is_boolean_yes "${PHP_IGBINARY_ENABLE}"; then
-        info "PHP-FPM: igbinary is enabled"
-        mv "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini"
+        # igbinary might have been enabled already by scripts in an Docker image which is based on this one
+        if [ -f "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini.inactive" ]; then
+            info "PHP-FPM: igbinary is enabled"
+            mv -f "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini"
+        fi
     else
         info "PHP-FPM: igbinary is disabled"
     fi
