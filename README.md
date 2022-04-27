@@ -69,7 +69,7 @@ similar mechanism in Kubernetes or your actual platform.
 |:---------------------|:--------|:--------------------|:---------------------------------------------------------------------------------------------------------------------------|
 | PHP_BASE_PATH        | string  | /opt/flownative/php | Base path for PHP (read-only)                                                                                              |
 | PHP_DATE_TIMEZONE    | string  |                     | Default timezone ([doc](https://www.php.net/manual/en/datetime.configuration.php#ini.date.timezone))                       |
-| PHP_ERROR_REPORTING  | string  | -1                  | PHP error reporting log levels ([doc](https://www.php.net/manual/en/errorfunc.configuration.php#ini.error-reporting))      |
+| PHP_ERROR_REPORTING  | string  | E_ALL               | PHP error reporting log levels ([doc](https://www.php.net/manual/en/errorfunc.configuration.php#ini.error-reporting))      |
 | PHP_DISPLAY_ERRORS   | string  | off                 | Display PHP errors ([doc](https://www.php.net/manual/en/errorfunc.configuration.php#ini.display-errors))                   |
 | PHP_ERROR_LOG        | string  | /dev/stderr         | Path leading to the file where PHP errors should be logged                                                                 |
 | PHP_MEMORY_LIMIT     | string  | 750M                | PHP memory limit ([doc](https://www.php.net/manual/en/ini.core.php#ini.memory-limit))                                      |
