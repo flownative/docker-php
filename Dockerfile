@@ -29,6 +29,7 @@ RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
     && /build.sh build_extension phpredis \
     && /build.sh build_extension xdebug \
     && /build.sh disable_extension xdebug \
+    && /build.sh build_extension ssh2 \
     && /build.sh clean
 
 USER 1000
