@@ -39,7 +39,10 @@ export PHP_IGBINARY_ENABLE="${PHP_IGBINARY_ENABLE:-false}"
 export PHP_FPM_USER="1000"
 export PHP_FPM_GROUP="1000"
 export PHP_FPM_PORT="${PHP_FPM_PORT:-9000}"
+export PHP_FPM_PM_MODE="${PHP_FPM_PM_MODE:-ondemand}"
 export PHP_FPM_MAX_CHILDREN="${PHP_FPM_MAX_CHILDREN:-20}"
+export PHP_FPM_ERROR_LOG_PATH="${PHP_FPM_ERROR_LOG_PATH:-/opt/flownative/log/php-fpm-error.log}"
+export PHP_FPM_ACCESS_LOG_PATH="${PHP_FPM_ACCESS_LOG_PATH:-/opt/flownative/log/php-fpm-access.log}"
 EOF
 }
 

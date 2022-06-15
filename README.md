@@ -48,7 +48,7 @@ services:
       - NGINX_PHP_FPM_HOST=app_php.local_beach
 
   php:
-    image: flownative/php:7.4
+    image: flownative/php:8.1
     volumes:
       - application:/application
     environment:
@@ -65,21 +65,25 @@ similar mechanism in Kubernetes or your actual platform.
 
 ### Environment variables
 
-| Variable Name        | Type    | Default             | Description                                                                                                                |
-| -------------------- | ------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| PHP_BASE_PATH        | string  | /opt/flownative/php | Base path for PHP (read-only)                                                                                              |
-| PHP_DATE_TIMEZONE    | string  |                     | Default timezone ([doc](https://www.php.net/manual/en/datetime.configuration.php#ini.date.timezone))                       |
-| PHP_ERROR_REPORTING  | string  | 2147483647          | PHP error reporting log levels ([doc](https://www.php.net/manual/en/errorfunc.configuration.php#ini.error-reporting))      |
-| PHP_DISPLAY_ERRORS   | string  | off                 | Display PHP errors ([doc](https://www.php.net/manual/en/errorfunc.configuration.php#ini.display-errors))                   |
-| PHP_ERROR_LOG        | string  | /dev/stderr         | Path leading to the file where PHP errors should be logged                                                                 |
-| PHP_MEMORY_LIMIT     | string  | 750M                | PHP memory limit ([doc](https://www.php.net/manual/en/ini.core.php#ini.memory-limit))                                      |
-| PHP_OPCACHE_PRELOAD  | string  |                     | Path and filename of a preload script ([doc](https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.preload)) |
-| PHP_XDEBUG_ENABLE    | boolean | false               | Enable or disable the Xdebug extension                                                                                     |
-| PHP_IGBINARY_ENABLE  | boolean | false               | Enable or disable the igbinary extension                                                                                   |
-| PHP_FPM_USER         | string  | 1000                | User id for running PHP (read-only)                                                                                        |
-| PHP_FPM_GROUP        | string  | 1000                | Group id for running PHP (read-only)                                                                                       |
-| PHP_FPM_PORT         | string  | 9000                | Port the PHP-FPM process listens to                                                                                        |
-| PHP_FPM_MAX_CHILDREN | string  | 20                  | Maximum number of children to run                                                                                          |
+| Variable Name           | Type    | Default                                | Description                                                                                                                |
+| ----------------------- | ------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| PHP_BASE_PATH           | string  | /opt/flownative/php                    | Base path for PHP (read-only)                                                                                              |
+| PHP_DATE_TIMEZONE       | string  |                                        | Default timezone ([doc](https://www.php.net/manual/en/datetime.configuration.php#ini.date.timezone))                       |
+| PHP_ERROR_REPORTING     | string  | 2147483647                             | PHP error reporting log levels ([doc](https://www.php.net/manual/en/errorfunc.configuration.php#ini.error-reporting))      |
+| PHP_DISPLAY_ERRORS      | string  | off                                    | Display PHP errors ([doc](https://www.php.net/manual/en/errorfunc.configuration.php#ini.display-errors))                   |
+| PHP_ERROR_LOG           | string  | /dev/stderr                            | Path leading to the file where PHP errors should be logged                                                                 |
+| PHP_FPM_ERROR_LOG_PATH  | string  | /opt/flownative/log/php-fpm-error.log  | Path leading to the file where PHP-FPM errors should be logged                                                             |
+| PHP_FPM_ACCESS_LOG_PATH | string  | /opt/flownative/log/php-fpm-access.log | Path leading to the file where PHP-FPM access should be logged                                                             |
+| PHP_MEMORY_LIMIT        | string  | 750M                                   | PHP memory limit ([doc](https://www.php.net/manual/en/ini.core.php#ini.memory-limit))                                      |
+| PHP_OPCACHE_PRELOAD     | string  |                                        | Path and filename of a preload script ([doc](https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.preload)) |
+| PHP_XDEBUG_ENABLE       | boolean | false                                  | Enable or disable the Xdebug extension                                                                                     |
+| PHP_IGBINARY_ENABLE     | boolean | false                                  | Enable or disable the igbinary extension                                                                                   |
+| PHP_FPM_USER            | string  | 1000                                   | User id for running PHP (read-only)                                                                                        |
+| PHP_FPM_GROUP           | string  | 1000                                   | Group id for running PHP (read-only)                                                                                       |
+| PHP_FPM_PORT            | string  | 9000                                   | Port the PHP-FPM process listens to                                                                                        |
+| PHP_FPM_MAX_CHILDREN    | string  | 20                                     | Maximum number of children to run                                                                                          |
+| PHP_FPM_PM_MODE         | string  | ondemand                               | Process manager mode for PHP-FPM; "static", "ondemand" or "dynamic"                                                        |
+|                         |         |                                        |                                                                                                                            |
 
 ## Security aspects
 
@@ -93,7 +97,7 @@ you can take advantage of the non-root approach by disallowing privilege
 escalation:
 
 ```yaml
-$ docker run flownative/php:7.4 --security-opt=no-new-privileges
+$ docker run flownative/php:8.1 --security-opt=no-new-privileges
 ```
 
 When you exec into this container running bash, you will notice your
@@ -102,7 +106,7 @@ container runs as a user with uid 1000, but in fact that user does not
 even exist.
 
 ```
-$ docker run -ti --name php --rm flownative/php:7.4 bash
+$ docker run -ti --name php --rm flownative/php:8.1 bash
 I have no name!@5a0adf17e426:/$ whoami
 whoami: cannot find name for user ID 1000
 ```
@@ -114,7 +118,7 @@ version for some of the tools as build arguments:
 
 ```bash
 docker build \
-    --build-arg PHP_VERSION=7.4.4 \
+    --build-arg PHP_VERSION=8.1.4 \
     -t flownative/php:latest .
 ```
 
