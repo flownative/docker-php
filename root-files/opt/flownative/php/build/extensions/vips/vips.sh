@@ -37,7 +37,7 @@ extensions_vips_runtime_packages() {
 # @return string
 #
 extensions_vips_url() {
-    echo "https://github.com/jcupitt/php-vips-ext/raw/master/vips-1.0.12.tgz"
+    echo "https://github.com/jcupitt/php-vips-ext/raw/master/vips-1.0.13.tgz"
 }
 
 # ---------------------------------------------------------------------------------------
