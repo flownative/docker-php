@@ -68,6 +68,7 @@ build_get_build_packages() {
         libwebp-dev
         libxml2-dev
         libzip-dev
+        libbz2-dev
     "
     echo $packages
 }
@@ -86,6 +87,7 @@ build_get_runtime_packages() {
         libsodium-dev
         libssl1.1
         libzip4
+        libbz2-1.0
         libncurses6
 
         libsqlite3-0
@@ -172,6 +174,7 @@ build_compile_php() {
             --with-webp \
             --with-zip \
             --with-zlib \
+            --with-bz2 \
             --without-pear \
             >$(debug_device)
     elif [[ "${PHP_VERSION}" =~ ^8.[0-1] ]]; then
@@ -204,6 +207,7 @@ build_compile_php() {
             --with-webp \
             --with-zip \
             --with-zlib \
+            --with-bz2 \
             --without-pear \
             >$(debug_device)
     else
