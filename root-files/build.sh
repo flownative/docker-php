@@ -177,7 +177,7 @@ build_compile_php() {
             --with-bz2 \
             --without-pear \
             >$(debug_device)
-    elif [[ "${PHP_VERSION}" =~ ^8.[0-1] ]]; then
+    elif [[ "${PHP_VERSION}" =~ ^8.[0-2] ]]; then
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
@@ -211,7 +211,7 @@ build_compile_php() {
             --without-pear \
             >$(debug_device)
     else
-        error "🛠 Unsupported PHP version ${PHP_VERSION}"
+        error "🛠 No configure call available for PHP version ${PHP_VERSION}"
         exit 1
     fi
 
@@ -430,7 +430,7 @@ case $1 in
 init)
     banner_flownative 'PHP'
 
-    if [[ ! "${PHP_VERSION}" =~ ^7.[1-4]|^8.[0-1] ]]; then
+    if [[ ! "${PHP_VERSION}" =~ ^7.[1-4]|^8.[0-2] ]]; then
         error "🛠 Unsupported PHP version '${PHP_VERSION}'"
         exit 1
     fi
