@@ -48,7 +48,7 @@ services:
       - NGINX_PHP_FPM_HOST=app_php.local_beach
 
   php:
-    image: flownative/php:8.1
+    image: flownative/php:8.2
     volumes:
       - application:/application
     environment:
@@ -77,8 +77,10 @@ similar mechanism in Kubernetes or your actual platform.
 | PHP_MEMORY_LIMIT                | string  | 750M                                   | PHP memory limit ([doc](https://www.php.net/manual/en/ini.core.php#ini.memory-limit))                                                               |
 | PHP_OPCACHE_PRELOAD             | string  |                                        | Path and filename of a preload script ([doc](https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.preload))                          |
 | PHP_XDEBUG_ENABLE               | boolean | false                                  | Enable or disable the Xdebug extension                                                                                                              |
+| PHP_XDEBUG_MODE                 | string  | develop                                | Controls which Xdebug features are enabled, for example "develop" or "debug". See Xdebug manual for details                                         |
+| PHP_XDEBUG_CONFIG               | string  |                                        | Values assigned to this variable are propagated as XDEBUG_CONFIG. See Xdebug manual for details                                                     |
 | PHP_XDEBUG_DISCOVER_CLIENT_HOST | boolean | false                                  | If enabled, Xdebug will first try to connect to the client that made the HTTP request. See Xdebug manual for details                                |
-| PHP_XDEBUG_CLIENT_HOST          | string  | host.xdebug.beach                      | Configures the IP address or hostname where Xdebug will attempt to connect to when initiating a debugging connection. See Xdebug manual for details |
+| PHP_XDEBUG_CLIENT_HOST          | string  |                                        | Configures the IP address or hostname where Xdebug will attempt to connect to when initiating a debugging connection. See Xdebug manual for details |
 | PHP_XDEBUG_MAX_NESTING_LEVEL    | integer | 512                                    | Controls the protection mechanism for infinite recursion protection. See Xdebug manual for details                                                  |
 | PHP_IGBINARY_ENABLE             | boolean | false                                  | Enable or disable the igbinary extension                                                                                                            |
 | PHP_FPM_USER                    | string  | 1000                                   | User id for running PHP (read-only)                                                                                                                 |
@@ -100,7 +102,7 @@ you can take advantage of the non-root approach by disallowing privilege
 escalation:
 
 ```yaml
-$ docker run flownative/php:8.1 --security-opt=no-new-privileges
+$ docker run flownative/php:8.2 --security-opt=no-new-privileges
 ```
 
 When you exec into this container running bash, you will notice your
@@ -109,7 +111,7 @@ container runs as a user with uid 1000, but in fact that user does not
 even exist.
 
 ```
-$ docker run -ti --name php --rm flownative/php:8.1 bash
+$ docker run -ti --name php --rm flownative/php:8.2 bash
 I have no name!@5a0adf17e426:/$ whoami
 whoami: cannot find name for user ID 1000
 ```
@@ -121,7 +123,7 @@ version for some of the tools as build arguments:
 
 ```bash
 docker build \
-    --build-arg PHP_VERSION=8.1.4 \
+    --build-arg PHP_VERSION=8.2.4 \
     -t flownative/php:latest .
 ```
 

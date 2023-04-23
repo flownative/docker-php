@@ -34,8 +34,11 @@ export PHP_ERROR_LOG="${PHP_ERROR_LOG:-/dev/stderr}"
 export PHP_OPCACHE_PRELOAD="${PHP_OPCACHE_PRELOAD:-}"
 
 export PHP_XDEBUG_ENABLE="${PHP_XDEBUG_ENABLE:-false}"
+export PHP_XDEBUG_MODE="${PHP_XDEBUG_MODE:-develop}"
 export PHP_XDEBUG_DISCOVER_CLIENT_HOST="${PHP_XDEBUG_DISCOVER_CLIENT_HOST:-false}"
-export PHP_XDEBUG_CLIENT_HOST="${PHP_XDEBUG_CLIENT_HOST:-host.xdebug.beach}"
+export PHP_XDEBUG_CLIENT_HOST="${PHP_XDEBUG_CLIENT_HOST:-}"
+export PHP_XDEBUG_CONFIG="${PHP_XDEBUG_CONFIG:-}"
+export XDEBUG_CONFIG="${XDEBUG_CONFIG:-${PHP_XDEBUG_CONFIG}}"
 export PHP_XDEBUG_MAX_NESTING_LEVEL="${PHP_XDEBUG_MAX_NESTING_LEVEL:-512}"
 
 export PHP_IGBINARY_ENABLE="${PHP_IGBINARY_ENABLE:-false}"
@@ -80,6 +83,7 @@ php_fpm_initialize() {
         mv "${PHP_CONF_PATH}/conf.d/php-ext-xdebug.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-xdebug.ini"
     else
         info "PHP-FPM: Xdebug is disabled"
+        export PHP_XDEBUG_MODE="off"
     fi
 
     if is_boolean_yes "${PHP_IGBINARY_ENABLE}"; then
