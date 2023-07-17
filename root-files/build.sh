@@ -149,6 +149,7 @@ build_compile_php() {
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
             --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
+            --enable-bcmath \
             --disable-cgi \
             --enable-calendar \
             --enable-exif \
@@ -182,6 +183,7 @@ build_compile_php() {
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
             --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
+            --enable-bcmath \
             --disable-cgi \
             --enable-calendar \
             --enable-exif \
