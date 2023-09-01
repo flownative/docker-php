@@ -117,7 +117,7 @@ build_get_unnecessary_packages() {
 build_compile_php() {
     local php_source_url
 
-    php_source_url="https://github.com/php/php-src/archive/php-${PHP_VERSION}.tar.gz"
+    php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
     info "🛠 Downloading source code for PHP ${PHP_VERSION} from ${php_source_url} ..."
     with_backoff "curl -sSL ${php_source_url} -o php.tar.gz" "15" || (
         error "Failed downloading PHP source from ${php_source_url}"
