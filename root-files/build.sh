@@ -117,7 +117,12 @@ build_get_unnecessary_packages() {
 build_compile_php() {
     local php_source_url
 
-    php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
+    if [[ "${PHP_VERSION}" =~ ^8.3 ]]; then
+        php_source_url="https://downloads.php.net/~jakub/php-${PHP_VERSION}.tar.gz"
+    else
+        php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
+    fi
+
     info "🛠 Downloading source code for PHP ${PHP_VERSION} from ${php_source_url} ..."
     with_backoff "curl -sSL ${php_source_url} -o php.tar.gz" "15" || (
         error "Failed downloading PHP source from ${php_source_url}"
@@ -178,7 +183,7 @@ build_compile_php() {
             --with-bz2 \
             --without-pear \
             >$(debug_device)
-    elif [[ "${PHP_VERSION}" =~ ^8.[0-2] ]]; then
+    elif [[ "${PHP_VERSION}" =~ ^8.[0-3] ]]; then
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
@@ -432,7 +437,7 @@ case $1 in
 init)
     banner_flownative 'PHP'
 
-    if [[ ! "${PHP_VERSION}" =~ ^7.[1-4]|^8.[0-2] ]]; then
+    if [[ ! "${PHP_VERSION}" =~ ^7.4|^8.[0-3] ]]; then
         error "🛠 Unsupported PHP version '${PHP_VERSION}'"
         exit 1
     fi
