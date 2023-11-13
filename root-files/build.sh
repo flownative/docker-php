@@ -119,7 +119,7 @@ build_compile_php() {
 
     if [[ "${PHP_VERSION}" =~ ^8.3 ]]; then
         # different source and replace - separator in version against what PHP uses (i.e. nothing)
-        php_source_url="https://downloads.php.net/~jakub/php-${PHP_VERSION/-/}.tar.gz"
+        php_source_url="https://downloads.php.net/~eric/php-${PHP_VERSION/-/}.tar.gz"
     else
         php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
     fi
