@@ -30,6 +30,8 @@ RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
     && /build.sh build_extension xdebug \
     && /build.sh disable_extension xdebug \
     && /build.sh build_extension ssh2 \
+    && /build.sh build_extension sqlsrv \
+    && /build.sh build_extension pdo_sqlsrv \
     && /build.sh clean
 
 USER 1000
