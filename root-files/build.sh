@@ -117,12 +117,7 @@ build_get_unnecessary_packages() {
 build_compile_php() {
     local php_source_url
 
-    if [[ "${PHP_VERSION}" =~ ^8.3 ]]; then
-        # different source and replace - separator in version against what PHP uses (i.e. nothing)
-        php_source_url="https://downloads.php.net/~eric/php-${PHP_VERSION/-/}.tar.gz"
-    else
-        php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
-    fi
+    php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
 
     info "🛠 Downloading source code for PHP ${PHP_VERSION} from ${php_source_url} ..."
     with_backoff "curl -sSL ${php_source_url} -o php.tar.gz" "15" || (
