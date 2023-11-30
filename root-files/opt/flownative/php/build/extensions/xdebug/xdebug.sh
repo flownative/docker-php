@@ -39,7 +39,7 @@ extensions_xdebug_runtime_packages() {
 #
 extensions_xdebug_url() {
     if [[ "${PHP_VERSION}" =~ ^8.3 ]]; then
-        echo "https://github.com/xdebug/xdebug/archive/refs/heads/master.tar.gz"
+        echo "https://xdebug.org/files/xdebug-3.3.0.tgz"
     elif [[ "${PHP_VERSION}" =~ ^8.2 ]]; then
         echo "https://xdebug.org/files/xdebug-3.2.2.tgz"
     elif [[ "${PHP_VERSION}" =~ ^8 ]]; then
