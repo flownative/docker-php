@@ -85,7 +85,7 @@ build_get_runtime_packages() {
         libpq5
         libreadline8
         libsodium-dev
-        libssl1.1
+        libssl3
         libzip4
         libbz2-1.0
         libncurses6
@@ -120,7 +120,7 @@ build_compile_php() {
     php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
 
     info "🛠 Downloading source code for PHP ${PHP_VERSION} from ${php_source_url} ..."
-    with_backoff "curl -sSL ${php_source_url} -o php.tar.gz" "15" || (
+    with_backoff "curl -sfSL ${php_source_url} -o php.tar.gz" "15" || (
         error "Failed downloading PHP source from ${php_source_url}"
         exit 1
     )
