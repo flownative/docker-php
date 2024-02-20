@@ -1,4 +1,4 @@
-FROM europe-docker.pkg.dev/flownative/docker/base:bullseye
+FROM europe-docker.pkg.dev/flownative/docker/base:bookworm
 
 LABEL org.opencontainers.image.authors="Robert Lemke <robert@flownative.com>"
 
