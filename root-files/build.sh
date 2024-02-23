@@ -27,9 +27,6 @@ build_create_directories() {
         "${PHP_BASE_PATH}/ext" \
         "${PHP_BASE_PATH}/tmp" \
         "${PHP_BASE_PATH}/log"
-
-    # Activate freetype-config-workaround (see freetype-config.sh):
-    ln -s ${PHP_BASE_PATH}/bin/freetype-config.sh /usr/local/bin/freetype-config
 }
 
 # ---------------------------------------------------------------------------------------
