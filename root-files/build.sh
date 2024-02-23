@@ -418,6 +418,7 @@ build_adjust_permissions() {
 build_clean() {
     rm -rf \
         /etc/emacs \
+        /opt/flownative/php/build \
         /usr/include \
         /var/cache/* \
         /var/log/* \
