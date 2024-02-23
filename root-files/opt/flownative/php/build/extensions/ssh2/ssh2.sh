@@ -37,7 +37,7 @@ extensions_ssh2_runtime_packages() {
 # @return string
 #
 extensions_ssh2_url() {
-     echo "https://pecl.php.net/get/ssh2-1.4.tgz"
+     echo "https://pecl.php.net/get/ssh2-1.4.1.tgz"
 }
 
 # ---------------------------------------------------------------------------------------
