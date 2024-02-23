@@ -34,12 +34,12 @@ extensions_phpredis_runtime_packages() {
 # extensions_phpredis_url() - Returns the URL leading to the source code archive
 #
 # see: https://github.com/phpredis/phpredis
-#      https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown
+#      https://github.com/phpredis/phpredis/blob/develop/INSTALL.md
 #
 # @return string
 #
 extensions_phpredis_url() {
-    echo "https://github.com/phpredis/phpredis/archive/5.3.7.tar.gz"
+    echo "https://github.com/phpredis/phpredis/archive/6.0.2.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------
