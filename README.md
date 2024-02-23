@@ -67,6 +67,7 @@ similar mechanism in Kubernetes or your actual platform.
 
 | Variable Name                   | Type    | Default                                | Description                                                                                                                                         |
 |---------------------------------|---------|----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| OPENSSL_LEGACY_MODE             | boolean | false                                  | If enabled, OpenSSL will have "legacy providers" enabled, see https://github.com/php/php-src/issues/12369 for details                               |
 | PHP_BASE_PATH                   | string  | /opt/flownative/php                    | Base path for PHP (read-only)                                                                                                                       |
 | PHP_DATE_TIMEZONE               | string  | UTC                                    | Default timezone ([doc](https://www.php.net/manual/en/datetime.configuration.php#ini.date.timezone))                                                |
 | PHP_ERROR_REPORTING             | string  | 2147483647                             | PHP error reporting log levels ([doc](https://www.php.net/manual/en/errorfunc.configuration.php#ini.error-reporting))                               |
@@ -88,7 +89,6 @@ similar mechanism in Kubernetes or your actual platform.
 | PHP_FPM_PORT                    | string  | 9000                                   | Port the PHP-FPM process listens to                                                                                                                 |
 | PHP_FPM_MAX_CHILDREN            | string  | 20                                     | Maximum number of children to run                                                                                                                   |
 | PHP_FPM_PM_MODE                 | string  | ondemand                               | Process manager mode for PHP-FPM; "static", "ondemand" or "dynamic"                                                                                 |
-|                                 |         |                                        |                                                                                                                                                     |
 
 ## Security aspects
 
