@@ -403,6 +403,7 @@ build_disable_php_extension() {
 build_adjust_permissions() {
     chown -R root:root "${PHP_BASE_PATH}"
     chmod -R g+rwX "${PHP_BASE_PATH}"
+    chmod g+w /usr/lib/ssl/extra-options.cnf
 
     chown -R 1000 \
         "${PHP_BASE_PATH}/etc" \
@@ -424,6 +425,18 @@ build_clean() {
         "${PHP_BASE_PATH}/include" \
         "${PHP_BASE_PATH}/php/man" \
         "${PHP_BASE_PATH}/src"
+}
+
+# ---------------------------------------------------------------------------------------
+# configure_openssl() - Add OpenSSL extra options include
+#
+# @return void
+#
+configure_openssl() {
+    cat >> /etc/ssl/openssl.cnf << EOF
+
+.include /usr/lib/ssl/extra-options.cnf
+EOF
 }
 
 # ---------------------------------------------------------------------------------------
@@ -452,6 +465,9 @@ build_extension)
     ;;
 disable_extension)
     build_disable_php_extension $2
+    ;;
+configure_openssl)
+    configure_openssl
     ;;
 clean)
     build_adjust_permissions
