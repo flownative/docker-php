@@ -10,12 +10,16 @@ set -o pipefail
 . "${FLOWNATIVE_LIB_PATH}/supervisor.sh"
 . "${FLOWNATIVE_LIB_PATH}/banner.sh"
 . "${FLOWNATIVE_LIB_PATH}/php-fpm.sh"
+. "${FLOWNATIVE_LIB_PATH}/openssl.sh"
 
 banner_flownative PHP
 
 eval "$(syslog_env)"
 syslog_initialize
 syslog_start
+
+eval "$(openssl_env)"
+openssl_initialize
 
 eval "$(php_fpm_env)"
 eval "$(supervisor_env)"
