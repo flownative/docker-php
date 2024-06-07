@@ -27,9 +27,6 @@ build_create_directories() {
         "${PHP_BASE_PATH}/ext" \
         "${PHP_BASE_PATH}/tmp" \
         "${PHP_BASE_PATH}/log"
-
-    # Activate freetype-config-workaround (see freetype-config.sh):
-    ln -s ${PHP_BASE_PATH}/bin/freetype-config.sh /usr/local/bin/freetype-config
 }
 
 # ---------------------------------------------------------------------------------------
@@ -144,42 +141,7 @@ build_compile_php() {
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
 
-    if [[ "${PHP_VERSION}" =~ ^7.4 ]]; then
-        info "🛠 Running configure for PHP 7.4 ..."
-        ./configure \
-            --prefix=${PHP_BASE_PATH} \
-            --with-config-file-path="${PHP_BASE_PATH}/etc" \
-            --with-config-file-scan-dir="${PHP_BASE_PATH}/etc/conf.d" \
-            --enable-bcmath \
-            --disable-cgi \
-            --enable-calendar \
-            --enable-exif \
-            --enable-fpm \
-            --enable-ftp \
-            --enable-gd \
-            --enable-intl \
-            --enable-mbstring \
-            --enable-pcntl \
-            --enable-soap \
-            --enable-sockets \
-            --with-curl \
-            --with-freetype \
-            --with-gmp \
-            --with-jpeg \
-            --with-mysqli \
-            --with-openssl \
-            --with-pdo-pgsql \
-            --with-pdo-mysql \
-            --with-readline \
-            --with-sodium \
-            --with-system-ciphers \
-            --with-webp \
-            --with-zip \
-            --with-zlib \
-            --with-bz2 \
-            --without-pear \
-            >$(debug_device)
-    elif [[ "${PHP_VERSION}" =~ ^8.[0-3] ]]; then
+    if [[ "${PHP_VERSION}" =~ ^8.[1-3] ]]; then
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
@@ -433,7 +395,7 @@ case $1 in
 init)
     banner_flownative 'PHP'
 
-    if [[ ! "${PHP_VERSION}" =~ ^7.4|^8.[0-3] ]]; then
+    if [[ ! "${PHP_VERSION}" =~ ^8.[1-3] ]]; then
         error "🛠 Unsupported PHP version '${PHP_VERSION}'"
         exit 1
     fi
