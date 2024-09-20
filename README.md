@@ -30,8 +30,6 @@ For a full-working solution tailored to Neos CMS and Neos Flow, please
 have a look at [Local Beach](https://flownative.com/localbeach) instead.
 
 ```yaml
-version: '3.7'
-
 volumes:
   application:
     name: app
@@ -39,7 +37,7 @@ volumes:
 
 services:
   webserver:
-    image: flownative/nginx:3
+    image: flownative/nginx:4
     ports:
       - "8080"
     volumes:
@@ -48,7 +46,7 @@ services:
       - NGINX_PHP_FPM_HOST=app_php.local_beach
 
   php:
-    image: flownative/php:8.2
+    image: flownative/php:8.3
     volumes:
       - application:/application
     environment:
@@ -102,7 +100,7 @@ you can take advantage of the non-root approach by disallowing privilege
 escalation:
 
 ```yaml
-$ docker run flownative/php:8.2 --security-opt=no-new-privileges
+$ docker run flownative/php:8.3 --security-opt=no-new-privileges
 ```
 
 When you exec into this container running bash, you will notice your
@@ -123,7 +121,7 @@ version for some of the tools as build arguments:
 
 ```bash
 docker build \
-    --build-arg PHP_VERSION=8.2.4 \
+    --build-arg PHP_VERSION=8.3.11 \
     -t flownative/php:latest .
 ```
 
