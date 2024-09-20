@@ -7,7 +7,7 @@ LABEL org.opencontainers.image.authors="Robert Lemke <robert@flownative.com>"
 # Latest versions: https://www.php.net/downloads.php
 
 ARG PHP_VERSION
-ENV PHP_VERSION ${PHP_VERSION}
+ENV PHP_VERSION=${PHP_VERSION}
 
 ENV PHP_BASE_PATH="/opt/flownative/php" \
     PATH="/opt/flownative/php/bin:$PATH" \
