@@ -115,7 +115,7 @@ build_compile_php() {
     local php_source_url
 
     if [[ "${PHP_VERSION}" =~ ^8.4 ]]; then
-        php_source_url="https://downloads.php.net/~calvinb/php-${PHP_VERSION}.tar.gz"
+        php_source_url="https://downloads.php.net/~saki/php-${PHP_VERSION}.tar.gz"
     else
         php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
     fi
