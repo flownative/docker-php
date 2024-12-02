@@ -86,8 +86,9 @@ build_get_runtime_packages() {
         libzip4
         libbz2-1.0
         libncurses6
-
         libsqlite3-0
+        nano
+        htop
     "
 
     echo $packages
