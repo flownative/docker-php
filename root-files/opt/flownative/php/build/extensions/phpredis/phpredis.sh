@@ -39,7 +39,7 @@ extensions_phpredis_runtime_packages() {
 # @return string
 #
 extensions_phpredis_url() {
-    echo "https://github.com/phpredis/phpredis/archive/6.0.2.tar.gz"
+    echo "https://github.com/phpredis/phpredis/archive/6.1.0.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------
