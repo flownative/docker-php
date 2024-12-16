@@ -43,6 +43,8 @@ export PHP_XDEBUG_MAX_NESTING_LEVEL="${PHP_XDEBUG_MAX_NESTING_LEVEL:-512}"
 
 export PHP_IGBINARY_ENABLE="${PHP_IGBINARY_ENABLE:-false}"
 
+export PHP_EXCIMER_ENABLE="${PHP_EXCIMER_ENABLE:-false}"
+
 export PHP_FPM_USER="1000"
 export PHP_FPM_GROUP="1000"
 export PHP_FPM_PORT="${PHP_FPM_PORT:-9000}"
@@ -94,6 +96,13 @@ php_fpm_initialize() {
         fi
     else
         info "PHP-FPM: igbinary is disabled"
+    fi
+
+    if is_boolean_yes "${PHP_EXCIMER_ENABLE}"; then
+        info "PHP-FPM: Excimer is enabled"
+        mv "${PHP_CONF_PATH}/conf.d/php-ext-mediawiki-php-excimer.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-mediawiki-php-excimer.ini"
+    else
+        info "PHP-FPM: Excimer is disabled"
     fi
 
     # Create a file descriptor for the PHP-FPM log output and clean up the log lines a bit:
