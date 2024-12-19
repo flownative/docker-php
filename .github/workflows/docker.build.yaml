@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        php: [ 8.1.31, 8.2.26, 8.3.14, 8.4.1 ]
+        php: [ 8.1.31, 8.2.27, 8.3.15, 8.4.2 ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
