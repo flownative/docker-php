@@ -13,7 +13,8 @@ jobs:
     strategy:
       matrix:
         php: [ 8.1.31, 8.2.27, 8.3.16, 8.4.3 ]
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest – downgraded from latest (being 24.04) due to https://3.basecamp.com/3923521/buckets/6162023/card_tables/cards/8268321367
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
