@@ -74,44 +74,18 @@ jobs:
           username: '_json_key'
           password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
 
-#      - name: Build Docker image
-#        uses: docker/build-push-action@v6
-#        with:
-#          context: .
-#          platforms: linux/amd64,linux/arm64
-#          push: true
-#          build-args: |
-#            PHP_VERSION=${{ matrix.php }}
-#          tags: ${{ steps.meta.outputs.tags }}
-#          labels: ${{ steps.meta.outputs.labels }}
-#          cache-from: type=gha,scope=php-${{ matrix.php }}-platform-${{ matrix.platform }}
-#          cache-to: type=gha,mode=max,scope=php-${{ matrix.php }}-platform-${{ matrix.platform }}
-
-      - name: Build Docker image (ARM)
+      - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/arm64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
             PHP_VERSION=${{ matrix.php }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=php-${{ matrix.php }}-platform-arm64
-          cache-to: type=gha,mode=max,scope=php-${{ matrix.php }}-platform-arm64
-
-      - name: Build Docker image (AMD)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64
-          push: true
-          build-args: |
-            PHP_VERSION=${{ matrix.php }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=php-${{ matrix.php }}-platform-amd64
-          cache-to: type=gha,mode=max,scope=php-${{ matrix.php }}-platform-amd64
+          cache-from: type=gha,scope=php-${{ matrix.php }}-platform-${{ inputs.platform }}
+          cache-to: type=gha,mode=max,scope=php-${{ matrix.php }}-platform-${{ inputs.platform }}
 
   announce:
     runs-on: ubuntu-latest
