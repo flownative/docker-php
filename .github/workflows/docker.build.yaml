@@ -14,8 +14,6 @@ jobs:
     strategy:
       matrix:
         php: [ 8.1.31, 8.2.27, 8.3.16, 8.4.3 ]
-    # downgraded from latest (being 24.04) due to https://3.basecamp.com/3923521/buckets/6162023/card_tables/cards/8268321367
-    # runs-on: ubuntu-22.04
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,14 +55,8 @@ jobs:
       - name: Set up QEMU
         id: qemu
         uses: docker/setup-qemu-action@v3
-        # commented, as tonistiigi/binfmt:latest has been updated. Remove, if it works.
-        #with:
-          # setup-qemu-action by default uses tonistiigi/binfmt:latest,
-          # which is out of date, see https://github.com/tonistiigi/binfmt/issues/165.
-          # This causes seg faults during build.
-          #image: tonistiigi/binfmt:qemu-v8.1.5
-      -
-        name: Set up Docker Buildx
+
+      - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v3
 
