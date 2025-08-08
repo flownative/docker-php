@@ -41,6 +41,8 @@ export PHP_XDEBUG_CONFIG="${PHP_XDEBUG_CONFIG:-}"
 export XDEBUG_CONFIG="${XDEBUG_CONFIG:-${PHP_XDEBUG_CONFIG}}"
 export PHP_XDEBUG_MAX_NESTING_LEVEL="${PHP_XDEBUG_MAX_NESTING_LEVEL:-512}"
 
+export PHP_SPX_ENABLE="${PHP_SPX_ENABLE:-false}"
+
 export PHP_IGBINARY_ENABLE="${PHP_IGBINARY_ENABLE:-false}"
 
 export PHP_EXCIMER_ENABLE="${PHP_EXCIMER_ENABLE:-false}"
@@ -86,6 +88,14 @@ php_fpm_initialize() {
     else
         info "PHP-FPM: Xdebug is disabled"
         export PHP_XDEBUG_MODE="off"
+    fi
+
+    if is_boolean_yes "${PHP_SPX_ENABLE}"; then
+        info "PHP-FPM: SPX is enabled"
+        mv "${PHP_CONF_PATH}/conf.d/php-ext-php-spx.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-php-spx.ini"
+    else
+        info "PHP-FPM: SPX is disabled"
+        export PHP_SPX_ENABLE=0
     fi
 
     if is_boolean_yes "${PHP_IGBINARY_ENABLE}"; then
