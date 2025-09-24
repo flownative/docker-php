@@ -31,8 +31,8 @@ RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
     && /build.sh disable_extension xdebug \
     && /build.sh build_extension php-spx \
     && /build.sh disable_extension php-spx \
-    && /build.sh build_extension mediawiki-php-excimer \
-    && /build.sh disable_extension mediawiki-php-excimer \
+    && /build.sh build_extension php-excimer \
+    && /build.sh disable_extension php-excimer \
     && /build.sh build_extension ssh2 \
     && /build.sh clean
 

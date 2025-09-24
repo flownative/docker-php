@@ -110,7 +110,7 @@ php_fpm_initialize() {
 
     if is_boolean_yes "${PHP_EXCIMER_ENABLE}"; then
         info "PHP-FPM: Excimer is enabled"
-        mv "${PHP_CONF_PATH}/conf.d/php-ext-mediawiki-php-excimer.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-mediawiki-php-excimer.ini"
+        mv "${PHP_CONF_PATH}/conf.d/php-ext-php-excimer.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-php-excimer.ini"
     else
         info "PHP-FPM: Excimer is disabled"
     fi
