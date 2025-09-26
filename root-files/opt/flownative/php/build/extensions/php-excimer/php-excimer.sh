@@ -40,7 +40,7 @@ extensions_php-excimer_runtime_packages() {
 # @return string
 #
 extensions_php-excimer_url() {
-    echo "https://github.com/wikimedia/php-excimer/archive/refs/tags/1.2.3.tar.gz"
+    echo "https://github.com/wikimedia/php-excimer/archive/refs/tags/1.2.5.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------
