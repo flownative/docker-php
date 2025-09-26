@@ -35,7 +35,11 @@ extensions_igbinary_runtime_packages() {
 # @return string
 #
 extensions_igbinary_url() {
-    echo "https://github.com/igbinary/igbinary/archive/refs/tags/3.2.15.tar.gz"
+    if [[ "${PHP_VERSION}" =~ ^8.5 ]]; then
+        echo "https://github.com/igbinary/igbinary/archive/refs/heads/master.tar.gz"
+    else
+        echo "https://github.com/igbinary/igbinary/archive/refs/tags/3.2.15.tar.gz"
+    fi
 }
 
 # ---------------------------------------------------------------------------------------
