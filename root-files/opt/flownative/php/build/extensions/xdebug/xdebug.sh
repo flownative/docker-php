@@ -38,7 +38,8 @@ extensions_xdebug_runtime_packages() {
 # @return string
 #
 extensions_xdebug_url() {
-    echo "https://xdebug.org/files/xdebug-3.4.1.tgz"
+#     echo "https://xdebug.org/files/xdebug-3.4.5.tgz"
+    echo "https://github.com/xdebug/xdebug/archive/refs/heads/master.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------
