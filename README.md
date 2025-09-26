@@ -87,7 +87,14 @@ similar mechanism in Kubernetes or your actual platform.
 | PHP_FPM_PORT                    | string  | 9000                                   | Port the PHP-FPM process listens to                                                                                                                 |
 | PHP_FPM_MAX_CHILDREN            | string  | 20                                     | Maximum number of children to run                                                                                                                   |
 | PHP_FPM_PM_MODE                 | string  | ondemand                               | Process manager mode for PHP-FPM; "static", "ondemand" or "dynamic"                                                                                 |
+| PHP_SPX_ENABLE                  | boolean | false                                  | Enable or disable the SPX extension                                                                                                                 |
+| PHP_SPX_KEY                     | string  | dev                                    | The secret key used for authentication                                                                                                              |
+| PHP_SPX_IP_WHITELIST            | string  |                                        | The IP address white list used for authentication as a comma separated list of IP addresses†                                                        |
+| PHP_SPX_IP_VAR                  | string  | REMOTE_ADDR                            | The $_SERVER key holding the client IP address used for authentication                                                                              |
+| PHP_SPX_TRUSTED_PROXIES         | string  | 127.0.0.1                              | The trusted proxy list as a comma separated list of IP addresses†, ingored when `PHP_SPX_IP_VAR`is `REMOTE_ADDR`                                    |
 |                                 |         |                                        |                                                                                                                                                     |
+
+† – `*` (match all) and subnet masks (e.g. `192.168.1.0/24`) are supported.
 
 ## Security aspects
 
