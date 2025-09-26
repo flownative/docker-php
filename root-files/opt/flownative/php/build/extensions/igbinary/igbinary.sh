@@ -35,7 +35,8 @@ extensions_igbinary_runtime_packages() {
 # @return string
 #
 extensions_igbinary_url() {
-    echo "https://github.com/igbinary/igbinary/archive/refs/tags/3.2.15.tar.gz"
+#     echo "https://github.com/igbinary/igbinary/archive/refs/tags/3.2.15.tar.gz"
+    echo "https://github.com/igbinary/igbinary/archive/refs/heads/master.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------
