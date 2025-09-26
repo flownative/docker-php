@@ -46,7 +46,7 @@ services:
       - NGINX_PHP_FPM_HOST=app_php.local_beach
 
   php:
-    image: flownative/php:8.3
+    image: flownative/php:8.5
     volumes:
       - application:/application
     environment:
@@ -108,7 +108,7 @@ you can take advantage of the non-root approach by disallowing privilege
 escalation:
 
 ```yaml
-$ docker run flownative/php:8.3 --security-opt=no-new-privileges
+$ docker run flownative/php:8.5 --security-opt=no-new-privileges
 ```
 
 When you exec into this container running bash, you will notice your
@@ -117,7 +117,7 @@ container runs as a user with uid 1000, but in fact that user does not
 even exist.
 
 ```
-$ docker run -ti --name php --rm flownative/php:8.2 bash
+$ docker run -ti --name php --rm flownative/php:8.5 bash
 I have no name!@5a0adf17e426:/$ whoami
 whoami: cannot find name for user ID 1000
 ```
@@ -129,7 +129,7 @@ version for some of the tools as build arguments:
 
 ```bash
 docker build \
-    --build-arg PHP_VERSION=8.3.11 \
+    --build-arg PHP_VERSION=8.5.0 \
     -t flownative/php:latest .
 ```
 
