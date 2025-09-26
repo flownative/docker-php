@@ -140,7 +140,7 @@ build_compile_php() {
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
 
-    if [[ "${PHP_VERSION}" =~ ^8.[1-4] ]]; then
+    if [[ "${PHP_VERSION}" =~ ^8.[1-5] ]]; then
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
@@ -394,7 +394,7 @@ case $1 in
 init)
     banner_flownative 'PHP'
 
-    if [[ ! "${PHP_VERSION}" =~ ^8.[1-4] ]]; then
+    if [[ ! "${PHP_VERSION}" =~ ^8.[1-5] ]]; then
         error "🛠 Unsupported PHP version '${PHP_VERSION}'"
         exit 1
     fi
