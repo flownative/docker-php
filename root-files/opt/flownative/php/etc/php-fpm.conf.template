@@ -7,6 +7,11 @@ pid = ${PHP_TMP_PATH}/php-fpm.pid
 ; the shell running php-fpm.sh, so we can wait for it with "wait":
 daemonize = no
 
+; tell the child processes to wait for 5s before executing the signal
+; received from the parent process, to make the php-fpm container
+; terminate gracefully:
+process_control_timeout = 5
+
 [www]
 
 access.log = ${PHP_FPM_ACCESS_LOG_PATH}

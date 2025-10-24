@@ -39,6 +39,10 @@ RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
 USER 1000
 EXPOSE 9000 9001
 
+# terminate with SIGQUIT which is handled gracefully by php-fpm
+# contrary to SIGTERM which terminates php-fpm immediately.
+STOPSIGNAL SIGQUIT
+
 WORKDIR ${PHP_BASE_PATH}
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "run" ]
