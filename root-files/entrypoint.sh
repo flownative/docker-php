@@ -25,7 +25,7 @@ php_fpm_initialize
 supervisor_initialize
 supervisor_start
 
-trap 'supervisor_stop; syslog_stop' SIGINT SIGTERM
+trap 'sleep 15; supervisor_stop; syslog_stop' SIGINT SIGTERM
 
 if [[ "$*" = *"run"* ]]; then
     supervisor_pid=$(supervisor_get_pid)
