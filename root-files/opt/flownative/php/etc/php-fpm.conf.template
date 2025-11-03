@@ -10,7 +10,7 @@ daemonize = no
 ; tell the child processes to wait for 5s before executing the signal
 ; received from the parent process, to make the php-fpm container
 ; terminate gracefully:
-process_control_timeout = 5
+process_control_timeout = 15
 
 [www]
 
