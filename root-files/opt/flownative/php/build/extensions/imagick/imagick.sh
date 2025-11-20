@@ -44,7 +44,11 @@ extensions_imagick_runtime_packages() {
 # @return string
 #
 extensions_imagick_url() {
-    echo "https://pecl.php.net/get/imagick-3.8.0.tgz"
+    if [[ "${PHP_VERSION}" =~ ^8.5 ]]; then
+        echo "https://github.com/imagick/imagick/archive/refs/heads/master.tar.gz"
+    else
+        echo "https://pecl.php.net/get/imagick-3.8.0.tgz"
+    fi
 }
 
 # ---------------------------------------------------------------------------------------
