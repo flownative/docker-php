@@ -44,7 +44,7 @@ extensions_imagick_runtime_packages() {
 # @return string
 #
 extensions_imagick_url() {
-    echo "https://pecl.php.net/get/imagick-3.8.0.tgz"
+    echo "https://pecl.php.net/get/imagick-3.8.1.tgz"
 }
 
 # ---------------------------------------------------------------------------------------
