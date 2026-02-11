@@ -34,6 +34,7 @@ RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
     && /build.sh build_extension php-excimer \
     && /build.sh disable_extension php-excimer \
     && /build.sh build_extension ssh2 \
+    && /build.sh build_extension mongodb \
     && /build.sh clean
 
 USER 1000
