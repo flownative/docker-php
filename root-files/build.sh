@@ -137,6 +137,9 @@ build_compile_php() {
         exit 1
     fi
 
+    # set build provider
+    export PHP_BUILD_PROVIDER="Flownative GmbH - www.flownative.com"
+
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
 
