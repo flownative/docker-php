@@ -403,6 +403,13 @@ init)
     fi
 
     build_create_directories
+
+    # opcache is no longer loaded via zend_extension in PHP 8.5+
+    php_major="${PHP_VERSION%%.*}"
+    php_minor="${PHP_VERSION#*.}"; php_minor="${php_minor%%.*}"
+    if (( php_major >= 9 || (php_major == 8 && php_minor >= 5) )); then
+        sed -i 's/^zend_extension=opcache\.so/;zend_extension=opcache.so/' "${PHP_BASE_PATH}/etc/php.ini"
+    fi
     ;;
 prepare)
     packages_install $(build_get_runtime_packages) 1>$(debug_device)
