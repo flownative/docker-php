@@ -83,8 +83,8 @@ jobs:
             PHP_VERSION=${{ matrix.php }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=php-${{ matrix.php }}
+          cache-to: type=gha,mode=max,scope=php-${{ matrix.php }}
 
   announce:
     runs-on: ubuntu-latest
