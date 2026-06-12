@@ -39,7 +39,7 @@ extensions_yaml_runtime_packages() {
 # @return string
 #
 extensions_yaml_url() {
-    echo "http://pecl.php.net/get/yaml-2.3.0.tgz"
+    echo "https://github.com/php/pecl-file_formats-yaml/archive/refs/tags/2.3.0.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------

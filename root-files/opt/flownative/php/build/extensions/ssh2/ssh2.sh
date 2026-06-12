@@ -32,12 +32,12 @@ extensions_ssh2_runtime_packages() {
 # ---------------------------------------------------------------------------------------
 # extensions_ssh2_url() - Returns the URL leading to the source code archive
 #
-# For new releases see: https://pecl.php.net/package/ssh2
+# For new releases see: https://github.com/php/pecl-networking-ssh2/
 #
 # @return string
 #
 extensions_ssh2_url() {
-     echo "https://pecl.php.net/get/ssh2-1.4.1.tgz"
+     echo "https://github.com/php/pecl-networking-ssh2/archive/refs/tags/1.4.1.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------
