@@ -53,8 +53,10 @@ export PHP_FPM_PORT="${PHP_FPM_PORT:-9000}"
 export PHP_FPM_PM_MODE="${PHP_FPM_PM_MODE:-ondemand}"
 export PHP_FPM_MAX_CHILDREN="${PHP_FPM_MAX_CHILDREN:-20}"
 export PHP_FPM_MAX_REQUESTS="${PHP_FPM_MAX_REQUESTS:-500}"
+export PHP_FPM_REQUEST_SLOWLOG_TIMEOUT="${PHP_FPM_REQUEST_SLOWLOG_TIMEOUT:-0}"
 export PHP_FPM_ERROR_LOG_PATH="${PHP_FPM_ERROR_LOG_PATH:-/opt/flownative/log/php-fpm-error.log}"
 export PHP_FPM_ACCESS_LOG_PATH="${PHP_FPM_ACCESS_LOG_PATH:-/opt/flownative/log/php-fpm-access.log}"
+export PHP_FPM_SLOWLOG_PATH="${PHP_FPM_SLOWLOG_PATH:-/opt/flownative/log/php-fpm-slow.log}"
 EOF
 }
 
