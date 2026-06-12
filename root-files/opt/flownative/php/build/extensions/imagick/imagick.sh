@@ -39,12 +39,12 @@ extensions_imagick_runtime_packages() {
 # ---------------------------------------------------------------------------------------
 # extensions_imagick_url() - Returns the URL leading to the source code archive
 #
-# For new releases see: https://pecl.php.net/package/imagick
+# For new releases see: https://github.com/Imagick/imagick
 #
 # @return string
 #
 extensions_imagick_url() {
-    echo "https://pecl.php.net/get/imagick-3.8.1.tgz"
+    echo "https://github.com/Imagick/imagick/archive/refs/tags/3.8.1.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------

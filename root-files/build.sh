@@ -246,13 +246,14 @@ build_php_extension() {
             error "Failed downloading extension ${extension_name}"
             exit 1
         )
-        tar -xf ${extension_name}.tar.gz -C ${extensions_dir} 2>/dev/null || (
+
+        mkdir -p "${extension_dir}"
+        tar -xzf "${extension_name}.tar.gz" -C "${extension_dir}" --strip-components=1 2>/dev/null || (
             error "Tar failed extracting the archive downloaded from ${extension_url}, returned exit code $?"
             exit 1
         )
 
-        mv "${extensions_dir}/${extension_name}"-* "${extension_dir}"
-        rm -f ${extension_name}.tar.gz "${extensions_dir}/package.xml"
+        rm -f ${extension_name}.tar.gz
     else
         info "🔌 ${extension_name}: No download URL specified, so not downloading extension source code"
     fi
