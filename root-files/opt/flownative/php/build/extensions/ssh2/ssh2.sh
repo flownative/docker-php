@@ -37,7 +37,7 @@ extensions_ssh2_runtime_packages() {
 # @return string
 #
 extensions_ssh2_url() {
-     echo "https://github.com/php/pecl-networking-ssh2/archive/refs/tags/1.4.1.tar.gz"
+     echo "https://github.com/php/pecl-networking-ssh2/archive/refs/tags/1.5.0.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------

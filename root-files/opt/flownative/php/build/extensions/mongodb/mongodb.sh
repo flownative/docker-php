@@ -40,7 +40,7 @@ extensions_mongodb_runtime_packages() {
 # @return string
 #
 extensions_mongodb_url() {
-    echo "https://github.com/mongodb/mongo-php-driver/releases/download/2.2.0/mongodb-2.2.0.tgz"
+    echo "https://github.com/mongodb/mongo-php-driver/releases/download/2.3.3/mongodb-2.3.3.tgz"
 }
 
 # ---------------------------------------------------------------------------------------
