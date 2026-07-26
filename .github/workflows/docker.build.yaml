@@ -84,7 +84,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=php-${{ matrix.php }}
-          cache-to: type=gha,mode=max,scope=php-${{ matrix.php }}
+          cache-to: type=gha,mode=max,scope=php-${{ matrix.php }},ignore-error=true
 
   announce:
     runs-on: ubuntu-latest
