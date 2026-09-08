@@ -1,4 +1,4 @@
-FROM harbor.flownative.io/docker/base:bookworm
+FROM harbor.flownative.io/docker/base:trixie-slim
 
 LABEL org.opencontainers.image.authors="Robert Lemke <robert@flownative.com>"
 

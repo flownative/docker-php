@@ -48,7 +48,7 @@ build_get_build_packages() {
         unzip
 
         libcurl4-openssl-dev
-        libfreetype6-dev
+        libfreetype-dev
         libgmp-dev
         libicu-dev
         libjpeg62-turbo-dev
@@ -59,7 +59,7 @@ build_get_build_packages() {
         libpng-dev
         libpspell-dev
         libpq-dev
-        libreadline6-dev
+        libreadline-dev
         libsqlite3-dev
         libssl-dev
         libwebp-dev
@@ -77,13 +77,14 @@ build_get_build_packages() {
 #
 build_get_runtime_packages() {
     local packages="
-        libcurl4
+        libcurl4t64
+        libicu76
         libonig5
         libpq5
-        libreadline8
+        libreadline8t64
         libsodium-dev
-        libssl3
-        libzip4
+        libssl3t64
+        libzip5
         libbz2-1.0
         libncurses6
         libsqlite3-0
