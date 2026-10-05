@@ -8,8 +8,8 @@
 #
 extensions_imagick_prepare() {
     # see: https://imagemagick.org/script/security-policy.php
-    rm -f /etc/ImageMagick-6/policy.xml
-    ln -s ${PHP_BASE_PATH}/build/extensions/imagick/policy.xml /etc/ImageMagick-6/policy.xml
+    rm -f /etc/ImageMagick-7/policy.xml
+    ln -s ${PHP_BASE_PATH}/build/extensions/imagick/policy.xml /etc/ImageMagick-7/policy.xml
 }
 
 # ---------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ extensions_imagick_build_packages() {
 #
 extensions_imagick_runtime_packages() {
     local packages="
-        libmagickwand-6.q16
+        libmagickwand-7.q16
     "
     echo $packages
 }
