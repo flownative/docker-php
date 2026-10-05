@@ -107,6 +107,8 @@ php_fpm_initialize() {
         if [ -f "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini.inactive" ]; then
             info "PHP-FPM: igbinary is enabled"
             mv -f "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini.inactive" "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini"
+        elif [ ! -f "${PHP_CONF_PATH}/conf.d/php-ext-igbinary.ini" ]; then
+            warn "PHP-FPM: igbinary is not available in this image (dropped as of PHP 8.6), ignoring PHP_IGBINARY_ENABLE"
         fi
     else
         info "PHP-FPM: igbinary is disabled"

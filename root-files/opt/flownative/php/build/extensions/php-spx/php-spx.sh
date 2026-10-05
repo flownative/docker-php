@@ -38,7 +38,7 @@ extensions_php-spx_runtime_packages() {
 # @return string
 #
 extensions_php-spx_url() {
-    echo "https://github.com/NoiseByNorthwest/php-spx/archive/refs/tags/v0.4.22.tar.gz"
+    echo "https://github.com/NoiseByNorthwest/php-spx/archive/refs/heads/v0.5.tar.gz"
 }
 
 # ---------------------------------------------------------------------------------------

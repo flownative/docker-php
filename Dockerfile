@@ -48,20 +48,8 @@ RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
     && /build.sh init \
     && /build.sh prepare \
     && /build.sh build \
-    && /build.sh build_extension vips \
-    && /build.sh build_extension igbinary \
-    && /build.sh disable_extension igbinary \
-    && /build.sh build_extension imagick \
-    && /build.sh build_extension yaml \
-    && /build.sh build_extension phpredis \
-    && /build.sh build_extension xdebug \
-    && /build.sh disable_extension xdebug \
-    && /build.sh build_extension php-spx \
-    && /build.sh disable_extension php-spx \
-    && /build.sh build_extension php-excimer \
-    && /build.sh disable_extension php-excimer \
-    && /build.sh build_extension ssh2 \
-    && /build.sh build_extension mongodb \
+    && /build.sh build_extensions \
+    && /build.sh disable_extensions \
     && /build.sh clean
 
 USER 1000

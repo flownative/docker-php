@@ -100,6 +100,18 @@ similar mechanism in Kubernetes or your actual platform.
 
 † – `*` (match all) and subnet masks (e.g. `192.168.1.0/24`) are supported.
 
+### Extensions in PHP 8.6 and later
+
+Images for PHP 8.6 and later no longer contain these extensions:
+
+- **igbinary** is dropped. It appears to be unmaintained, and the
+  advantage it promised over PHP's own serializer no longer holds.
+  `PHP_IGBINARY_ENABLE` is ignored, with a warning.
+- **vips** is dropped. Current versions of php-vips require FFI, which
+  this image does not allow. Use Imagick instead.
+
+Images for PHP 8.2 to 8.5 still contain both extensions.
+
 ## Security aspects
 
 This image is designed to run as a non-root container. Using an
@@ -149,6 +161,8 @@ HEIC images, can read SVG, TIFF and the first page of a PDF, keep
 transparency when writing PNG, GIF, WebP, AVIF and HEIC, and keep the frames of
 an animated GIF when writing GIF and WebP. A library without any API for
 a format, such as GD built without AVIF support, is reported as skipped.
+So is vips on PHP 8.6 and later, which no longer includes it, and a
+format which every library skipped, such as PDF without Ghostscript.
 Any other failure, or a format which no library can read or write, fails
 the run. The results appear in the job summary and the generated images
 are uploaded as a build artifact.

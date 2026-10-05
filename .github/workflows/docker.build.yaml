@@ -36,7 +36,7 @@ jobs:
     needs: prepare
     strategy:
       matrix:
-        php: [ 8.2.36, 8.3.37, 8.4.28, 8.5.13 ]
+        php: [ 8.2.36, 8.3.37, 8.4.28, 8.5.13, 8.6.0 ]
         platform: [ linux/amd64, linux/arm64 ]
         include:
           - platform: linux/amd64

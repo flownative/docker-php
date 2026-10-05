@@ -7,7 +7,13 @@
 # @return List of packages
 #
 extensions_imagick_prepare() {
-    # see: https://imagemagick.org/script/security-policy.php
+    # Replace the policy shipped with libmagickcore by our own. This runs after the
+    # extension's packages are installed, which create /etc/ImageMagick-7.
+    # see: https://imagemagick.org/security-policy/
+    if [[ ! -d /etc/ImageMagick-7 ]]; then
+        error "🔌 imagick: /etc/ImageMagick-7 not found, cannot install ImageMagick policy"
+        exit 1
+    fi
     rm -f /etc/ImageMagick-7/policy.xml
     ln -s ${PHP_BASE_PATH}/build/extensions/imagick/policy.xml /etc/ImageMagick-7/policy.xml
 }

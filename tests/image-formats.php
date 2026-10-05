@@ -76,6 +76,12 @@ interface ImageLibrary
 
     public function isAvailable(): bool;
 
+    /**
+     * Whether the image is supposed to contain this library. A missing library
+     * which is not expected is reported as skipped instead of failed.
+     */
+    public function isExpected(): bool;
+
     public function createPattern(int $width, int $height): mixed;
 
     /**
@@ -143,6 +149,11 @@ final class GdLibrary implements ImageLibrary
     public function isAvailable(): bool
     {
         return extension_loaded('gd');
+    }
+
+    public function isExpected(): bool
+    {
+        return true;
     }
 
     public function createPattern(int $width, int $height): mixed
@@ -312,6 +323,11 @@ final class ImagickLibrary implements ImageLibrary
     public function isAvailable(): bool
     {
         return extension_loaded('imagick');
+    }
+
+    public function isExpected(): bool
+    {
+        return true;
     }
 
     public function createPattern(int $width, int $height): mixed
@@ -509,6 +525,14 @@ final class VipsLibrary implements ImageLibrary
     public function isAvailable(): bool
     {
         return extension_loaded('vips');
+    }
+
+    /**
+     * The vips extension is not included as of PHP 8.6, see README.
+     */
+    public function isExpected(): bool
+    {
+        return PHP_VERSION_ID < 80600;
     }
 
     public function createPattern(int $width, int $height): mixed
@@ -748,11 +772,11 @@ final class Report
     /**
      * @return string[] libraries whose check of the given kind passed
      */
-    public function librariesWith(string $category, string $format): array
+    public function librariesWith(string $category, string $format, Status $status = Status::Ok): array
     {
         $libraries = [];
         foreach ($this->checks as $check) {
-            if ($check->category === $category && $check->format === $format && $check->status === Status::Ok && $check->source === '') {
+            if ($check->category === $category && $check->format === $format && $check->status === $status && $check->source === '') {
                 $libraries[] = $check->library;
             }
         }
@@ -1155,7 +1179,11 @@ function main(): int
     foreach ($libraries as $library) {
         $name = $library->name();
         if (!$library->isAvailable()) {
-            $report->add($name, 'extension', '-', Status::Fail, 'extension is not loaded');
+            if ($library->isExpected()) {
+                $report->add($name, 'extension', '-', Status::Fail, 'extension is not loaded');
+            } else {
+                $report->add($name, 'extension', '-', Status::Skip, sprintf('extension is not included for PHP %s', PHP_VERSION));
+            }
             continue;
         }
         $versions[] = $library->version();
@@ -1194,11 +1222,11 @@ function main(): int
         $readers = $report->librariesWith('read', $format);
         $writers = $report->librariesWith('write', $format);
         $detail = sprintf('read: %s; write: %s', $readers === [] ? 'none' : implode(', ', $readers), $writers === [] ? 'none' : implode(', ', $writers));
-        $report->add('any', 'coverage', $format, $readers !== [] && $writers !== [] ? Status::Ok : Status::Fail, $detail);
+        $report->add('any', 'coverage', $format, coverageStatus($report, $readers, 'read', $format, $writers, 'write'), $detail);
     }
     foreach (READ_ONLY_FORMATS as $format) {
         $readers = $report->librariesWith('read', $format);
-        $report->add('any', 'coverage', $format, $readers !== [] ? Status::Ok : Status::Fail, 'read: ' . ($readers === [] ? 'none' : implode(', ', $readers)));
+        $report->add('any', 'coverage', $format, coverageStatus($report, $readers, 'read', $format), 'read: ' . ($readers === [] ? 'none' : implode(', ', $readers)));
     }
 
     printf("\n%d ok, %d failed, %d skipped\n", $report->count(Status::Ok), $report->count(Status::Fail), $report->count(Status::Skip));
@@ -1214,6 +1242,35 @@ function main(): int
     }
 
     return $report->hasFailures() ? 1 : 0;
+}
+
+/**
+ * Coverage passes if some library can do each of the given operations. If no
+ * library can, it fails only if a library actually failed the check. If all of
+ * them skipped it, for example because Ghostscript is not installed, the
+ * coverage is reported as skipped as well.
+ *
+ * @param string[] $readers
+ * @param string[]|null $writers
+ */
+function coverageStatus(Report $report, array $readers, string $readCategory, string $format, ?array $writers = null, string $writeCategory = ''): Status
+{
+    $missing = [];
+    if ($readers === []) {
+        $missing[] = $readCategory;
+    }
+    if ($writers === []) {
+        $missing[] = $writeCategory;
+    }
+    if ($missing === []) {
+        return Status::Ok;
+    }
+    foreach ($missing as $category) {
+        if ($report->librariesWith($category, $format, Status::Fail) !== []) {
+            return Status::Fail;
+        }
+    }
+    return Status::Skip;
 }
 
 exit(main());
