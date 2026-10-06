@@ -16,7 +16,7 @@ jobs:
         php: [ 8.2.34, 8.3.35, 8.4.26, 8.5.11 ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: 'main'
           fetch-depth: 100
@@ -28,7 +28,7 @@ jobs:
       - run: |
           sudo chmod -R ugo+rwX . && shopt -s dotglob && rm -rf *
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ steps.latest_version.outputs.tag }}
           fetch-depth: 100
