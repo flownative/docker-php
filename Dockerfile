@@ -1,3 +1,28 @@
+# -----------------------------------------------------------------------------
+# Build envsubst for the target architecture.
+#
+# This image ships the Go implementation of envsubst (github.com/a8m/envsubst)
+# rather than the GNU one, which would pull in gettext. Images based on this
+# one rely on it being available as well.
+#
+# The stage runs on the build platform and cross-compiles, so no emulation is
+# involved.
+
+FROM --platform=$BUILDPLATFORM golang:1-alpine AS envsubst-builder
+
+ARG ENVSUBST_VERSION=v1.4.2
+ARG TARGETOS
+ARG TARGETARCH
+
+WORKDIR /src
+RUN go mod init envsubst-build \
+    && go get github.com/a8m/envsubst/cmd/envsubst@${ENVSUBST_VERSION} \
+    && CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+       go build -o /out/envsubst github.com/a8m/envsubst/cmd/envsubst
+
+# -----------------------------------------------------------------------------
+# The actual image
+
 FROM harbor.flownative.io/docker/base:trixie-slim
 
 LABEL org.opencontainers.image.authors="Robert Lemke <robert@flownative.com>"
@@ -14,6 +39,8 @@ ENV PHP_BASE_PATH="/opt/flownative/php" \
     LOG_DEBUG="false"
 
 USER root
+
+COPY --from=envsubst-builder /out/envsubst /usr/local/bin/envsubst
 
 COPY root-files /
 
