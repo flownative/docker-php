@@ -73,6 +73,18 @@ jobs:
           username: ${{ secrets.HARBOR_DOCKER_USERNAME }}
           password: ${{ secrets.HARBOR_DOCKER_PASSWORD }}
 
+      # One cache per minor version, so a new patch release overwrites the
+      # cache of the previous one instead of leaving it behind in the registry.
+      - name: Determine build cache reference
+        id: cache
+        env:
+          PHP_VERSION: ${{ matrix.php }}
+        run: echo "ref=harbor.flownative.io/docker/php-build-cache:${PHP_VERSION%.*}" >> "${GITHUB_OUTPUT}"
+
+      # The cache lives in the registry rather than in the GitHub Actions
+      # cache: the latter evicts layer blobs while the cache index still
+      # references them, and BuildKit then fails the build instead of treating
+      # it as a cache miss.
       - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
@@ -83,8 +95,8 @@ jobs:
             PHP_VERSION=${{ matrix.php }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=php-${{ matrix.php }}
-          cache-to: type=gha,mode=max,scope=php-${{ matrix.php }},ignore-error=true
+          cache-from: type=registry,ref=${{ steps.cache.outputs.ref }}
+          cache-to: type=registry,ref=${{ steps.cache.outputs.ref }},mode=max,image-manifest=true,oci-mediatypes=true,ignore-error=true
 
   announce:
     runs-on: ubuntu-latest
