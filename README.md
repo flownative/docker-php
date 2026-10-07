@@ -139,6 +139,58 @@ docker build \
 
 Check the latest stable release on [php.net](https://www.php.net).
 
+## Testing this image
+
+The workflow `.github/workflows/docker.test.yaml` builds the image for
+every supported PHP version on each push and pull request and runs
+`tests/image-formats.php` inside it. The script checks that GD, Imagick
+and vips can read, manipulate and write JPEG, PNG, GIF, WebP and AVIF
+images, can read SVG, HEIC, TIFF and the first page of a PDF, keep
+transparency when writing PNG, GIF, WebP and AVIF, and keep the frames of
+an animated GIF when writing GIF and WebP. A library without any API for
+a format, such as GD built without AVIF support, is reported as skipped.
+Any other failure, or a format which no library can read or write, fails
+the run. The results appear in the job summary and the generated images
+are uploaded as a build artifact.
+
+To run the test against a local image:
+
+```bash
+docker run --rm \
+    --volume "$(pwd)/tests:/tests:ro" \
+    flownative/php:8.5 \
+    php /tests/image-formats.php
+```
+
+Pass `--output-dir=/some/path` (a writable volume) to keep the generated
+images and a Markdown summary of the results.
+
+### Findings for the current image
+
+As of October 2026 the test reports these gaps:
+
+- AVIF can be read but not written. ImageMagick and libvips both rely on
+  libheif, which is installed with decoder plugins only. Installing
+  `libheif-plugin-aomenc` as a runtime package of the imagick or vips
+  extension gives both an AV1 encoder. GD would additionally need
+  `libavif-dev` at build time and `--with-avif` in the configure call.
+- Imagick cannot read SVG. ImageMagick delegates SVG rendering to an
+  external program which is not installed. libvips renders SVG through
+  librsvg.
+- Imagick cannot read PDF because Ghostscript is not installed, although
+  the ImageMagick policy explicitly allows the PDF coder. libvips renders
+  PDF pages through poppler.
+- GD has no API for SVG, HEIC, TIFF or PDF and reads only the first frame
+  of an animated GIF. Imagick and libvips handle all of these, including
+  writing animated GIF and WebP.
+- GD writes a transparent GIF only for the colour declared with
+  `imagecolortransparent()`, and `imagewebp()` rejects palette images, so
+  a transparent palette PNG has to go through `imagepalettetotruecolor()`
+  before it can be converted to WebP.
+- The imagick extension reports `@PACKAGE_VERSION@` as its version
+  because it is built from a GitHub source archive instead of the PECL
+  release.
+
 ## Maintenance
 
 The Flownative images are built through Github Workflows. A new release
