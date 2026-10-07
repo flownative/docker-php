@@ -178,8 +178,10 @@ As of October 2026 the test reports these gaps:
   which Debian builds without librsvg. libvips renders SVG through
   librsvg.
 - Imagick cannot read PDF because Ghostscript is not installed, although
-  the ImageMagick policy explicitly allows the PDF coder. libvips renders
-  PDF pages through poppler.
+  the ImageMagick policy explicitly allows the PDF coder. The check is
+  reported as skipped in that case; images built on top of this one, such
+  as docker-beach-php, install Ghostscript. libvips renders PDF pages
+  through poppler.
 - GD has no API for SVG, HEIC, TIFF or PDF and reads only the first frame
   of an animated GIF. Imagick and libvips handle all of these, including
   writing animated GIF and WebP.

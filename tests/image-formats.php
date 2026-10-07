@@ -285,9 +285,11 @@ final class GdLibrary implements ImageLibrary
 }
 
 /**
- * Imagick is never skipped: ImageMagick supports every format checked here,
- * so a failure means a missing delegate or policy restriction in the image,
- * which is exactly what the check is meant to reveal.
+ * Imagick is not skipped for a missing coder: ImageMagick supports every
+ * format checked here, so a failure means a missing delegate or policy
+ * restriction in the image, which is exactly what the check is meant to
+ * reveal. The one exception is PDF, which ImageMagick hands to Ghostscript.
+ * This image ships without it; images built on top install it when needed.
  */
 final class ImagickLibrary implements ImageLibrary
 {
@@ -374,6 +376,9 @@ final class ImagickLibrary implements ImageLibrary
     {
         $image = new Imagick();
         if ($format === 'pdf') {
+            if (!$this->hasGhostscript()) {
+                throw new SkippedException('Ghostscript is not installed');
+            }
             // The resolution decides the raster size of a page. At 72 dpi one point is one pixel.
             $image->setResolution(72, 72);
             $image->readImage($path . '[0]');
@@ -446,6 +451,16 @@ final class ImagickLibrary implements ImageLibrary
     {
         $frames->setIteratorIndex($frame);
         return $this->pixel($frames, $x, $y);
+    }
+
+    private function hasGhostscript(): bool
+    {
+        foreach (explode(PATH_SEPARATOR, (string)getenv('PATH')) as $directory) {
+            if (is_executable($directory . '/gs')) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
