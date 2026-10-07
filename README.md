@@ -144,9 +144,9 @@ Check the latest stable release on [php.net](https://www.php.net).
 The workflow `.github/workflows/docker.test.yaml` builds the image for
 every supported PHP version on each push and pull request and runs
 `tests/image-formats.php` inside it. The script checks that GD, Imagick
-and vips can read, manipulate and write JPEG, PNG, GIF, WebP and AVIF
-images, can read SVG, HEIC, TIFF and the first page of a PDF, keep
-transparency when writing PNG, GIF, WebP and AVIF, and keep the frames of
+and vips can read, manipulate and write JPEG, PNG, GIF, WebP, AVIF and
+HEIC images, can read SVG, TIFF and the first page of a PDF, keep
+transparency when writing PNG, GIF, WebP, AVIF and HEIC, and keep the frames of
 an animated GIF when writing GIF and WebP. A library without any API for
 a format, such as GD built without AVIF support, is reported as skipped.
 Any other failure, or a format which no library can read or write, fails
@@ -174,12 +174,14 @@ As of October 2026 the test reports these gaps:
   `libheif-plugin-aomenc` as a runtime package of the imagick or vips
   extension gives both an AV1 encoder. GD would additionally need
   `libavif-dev` at build time and `--with-avif` in the configure call.
-- Imagick cannot read SVG. ImageMagick delegates SVG rendering to an
-  external program which is not installed. libvips renders SVG through
+- Imagick reads SVG through the coder from `libmagickcore-7.q16-10-extra`,
+  which Debian builds without librsvg. libvips renders SVG through
   librsvg.
 - Imagick cannot read PDF because Ghostscript is not installed, although
-  the ImageMagick policy explicitly allows the PDF coder. libvips renders
-  PDF pages through poppler.
+  the ImageMagick policy explicitly allows the PDF coder. The check is
+  reported as skipped in that case; images built on top of this one, such
+  as docker-beach-php, install Ghostscript. libvips renders PDF pages
+  through poppler.
 - GD has no API for SVG, HEIC, TIFF or PDF and reads only the first frame
   of an animated GIF. Imagick and libvips handle all of these, including
   writing animated GIF and WebP.

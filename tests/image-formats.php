@@ -10,7 +10,7 @@ declare(strict_types=1);
  * runs it through resize, rotate, flip and crop, writes it in each format and
  * reads the result back. The fixtures in tests/fixtures were produced by an
  * independent toolchain and cover reading, including formats which are only
- * ever read on a web server, such as SVG, HEIC, TIFF and PDF. Files written
+ * ever read on a web server, such as SVG, TIFF and PDF. Files written
  * by one library are read by the others as well. Separate checks make sure
  * that transparency and animation frames survive a resize and a write.
  *
@@ -23,9 +23,9 @@ declare(strict_types=1);
  * least one library.
  */
 
-const WRITABLE_FORMATS = ['jpeg', 'png', 'gif', 'webp', 'avif'];
-const READ_ONLY_FORMATS = ['svg', 'heic', 'tiff', 'pdf'];
-const ALPHA_FORMATS = ['png', 'gif', 'webp', 'avif'];
+const WRITABLE_FORMATS = ['jpeg', 'png', 'gif', 'webp', 'avif', 'heic'];
+const READ_ONLY_FORMATS = ['svg', 'tiff', 'pdf'];
+const ALPHA_FORMATS = ['png', 'gif', 'webp', 'avif', 'heic'];
 const ANIMATION_FORMATS = ['gif', 'webp'];
 
 // Quadrant colours of the test pattern: top left, top right, bottom left, bottom right
@@ -285,9 +285,11 @@ final class GdLibrary implements ImageLibrary
 }
 
 /**
- * Imagick is never skipped: ImageMagick supports every format checked here,
- * so a failure means a missing delegate or policy restriction in the image,
- * which is exactly what the check is meant to reveal.
+ * Imagick is not skipped for a missing coder: ImageMagick supports every
+ * format checked here, so a failure means a missing delegate or policy
+ * restriction in the image, which is exactly what the check is meant to
+ * reveal. The one exception is PDF, which ImageMagick hands to Ghostscript.
+ * This image ships without it; images built on top install it when needed.
  */
 final class ImagickLibrary implements ImageLibrary
 {
@@ -374,6 +376,9 @@ final class ImagickLibrary implements ImageLibrary
     {
         $image = new Imagick();
         if ($format === 'pdf') {
+            if (!$this->hasGhostscript()) {
+                throw new SkippedException('Ghostscript is not installed');
+            }
             // The resolution decides the raster size of a page. At 72 dpi one point is one pixel.
             $image->setResolution(72, 72);
             $image->readImage($path . '[0]');
@@ -447,6 +452,16 @@ final class ImagickLibrary implements ImageLibrary
         $frames->setIteratorIndex($frame);
         return $this->pixel($frames, $x, $y);
     }
+
+    private function hasGhostscript(): bool
+    {
+        foreach (explode(PATH_SEPARATOR, (string)getenv('PATH')) as $directory) {
+            if (is_executable($directory . '/gs')) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 /**
@@ -478,6 +493,7 @@ final class VipsLibrary implements ImageLibrary
         'gif' => ['VipsForeignSaveCgifFile', 'VipsForeignSaveGifFile'],
         'webp' => ['VipsForeignSaveWebpFile'],
         'avif' => ['VipsForeignSaveHeifFile', 'VipsForeignSaveAvifFile'],
+        'heic' => ['VipsForeignSaveHeifFile'],
     ];
 
     public function name(): string
@@ -540,7 +556,7 @@ final class VipsLibrary implements ImageLibrary
         $this->requireOperation(self::SAVERS[$format], sprintf('this libvips build has no %s saver', $format));
         $options = match ($format) {
             'jpeg', 'webp' => ['Q' => 90],
-            'avif' => ['Q' => 60],
+            'avif', 'heic' => ['Q' => 60],
             default => [],
         };
         if (!is_array(vips_image_write_to_file($image, $path, $options))) {
@@ -772,7 +788,7 @@ final class Report
         $lines[] = '';
         $lines[] = implode(', ', $versions);
         $lines[] = '';
-        $lines[] = 'Read and write per library (read / write, read only for the last four):';
+        $lines[] = sprintf('Read and write per library (read / write, read only for the last %d):', count(READ_ONLY_FORMATS));
         $lines[] = '';
         $lines[] = '| Library | Manipulate | ' . implode(' | ', [...WRITABLE_FORMATS, ...READ_ONLY_FORMATS]) . ' |';
         $lines[] = '|---|---|' . str_repeat('---|', count(WRITABLE_FORMATS) + count(READ_ONLY_FORMATS));
@@ -971,6 +987,9 @@ function detectFormat(string $path): ?string
     }
     if (substr($bytes, 4, 4) === 'ftyp' && in_array(substr($bytes, 8, 4), ['avif', 'avis'], true)) {
         return 'avif';
+    }
+    if (substr($bytes, 4, 4) === 'ftyp' && in_array(substr($bytes, 8, 4), ['heic', 'heix'], true)) {
+        return 'heic';
     }
     return null;
 }

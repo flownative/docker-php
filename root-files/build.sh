@@ -47,6 +47,7 @@ build_get_build_packages() {
         re2c
         unzip
 
+        libavif-dev
         libcurl4-openssl-dev
         libfreetype-dev
         libgmp-dev
@@ -77,6 +78,7 @@ build_get_build_packages() {
 #
 build_get_runtime_packages() {
     local packages="
+        libavif16
         libcurl4t64
         libicu76
         libonig5
@@ -88,6 +90,8 @@ build_get_runtime_packages() {
         libbz2-1.0
         libncurses6
         libsqlite3-0
+        libheif-plugin-aomenc
+        libheif-plugin-x265
     "
 
     echo $packages
@@ -161,6 +165,7 @@ build_compile_php() {
             --enable-pcntl \
             --enable-soap \
             --enable-sockets \
+            --with-avif \
             --with-curl \
             --with-freetype \
             --with-gmp \

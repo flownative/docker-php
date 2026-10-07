@@ -32,6 +32,7 @@ extensions_imagick_build_packages() {
 extensions_imagick_runtime_packages() {
     local packages="
         libmagickwand-7.q16
+        libmagickcore-7.q16-10-extra
     "
     echo $packages
 }
