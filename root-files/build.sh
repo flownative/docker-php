@@ -88,6 +88,7 @@ build_get_runtime_packages() {
         libbz2-1.0
         libncurses6
         libsqlite3-0
+        libheif-plugin-aomenc
     "
 
     echo $packages
