@@ -34,9 +34,10 @@ jobs:
           username: ${{ secrets.DOCKER_IO_REGISTRY_USER }}
           password: ${{ secrets.DOCKER_IO_REGISTRY_PASSWORD }}
 
-      # The release build's cache is read as a fallback, but written to a
-      # separate scope so this single-platform build never replaces the
-      # multi-platform cache the release build relies on.
+      # Built from scratch on purpose: the GitHub Actions cache evicts layer
+      # blobs while the cache index still references them, and BuildKit then
+      # fails the build instead of treating it as a cache miss. A native
+      # amd64 build is fast enough without a cache.
       - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
@@ -46,10 +47,6 @@ jobs:
           build-args: |
             PHP_VERSION=${{ matrix.php }}
           tags: flownative/php:test
-          cache-from: |
-            type=gha,scope=php-test-${{ matrix.php }}
-            type=gha,scope=php-${{ matrix.php }}
-          cache-to: type=gha,mode=max,scope=php-test-${{ matrix.php }},ignore-error=true
 
       # The container runs as uid 1000, so the results directory must be
       # writable for everyone.
