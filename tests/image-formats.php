@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 const WRITABLE_FORMATS = ['jpeg', 'png', 'gif', 'webp', 'avif', 'heic'];
 const READ_ONLY_FORMATS = ['svg', 'tiff', 'pdf'];
-const ALPHA_FORMATS = ['png', 'gif', 'webp', 'avif'];
+const ALPHA_FORMATS = ['png', 'gif', 'webp', 'avif', 'heic'];
 const ANIMATION_FORMATS = ['gif', 'webp'];
 
 // Quadrant colours of the test pattern: top left, top right, bottom left, bottom right

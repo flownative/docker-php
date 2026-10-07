@@ -146,7 +146,7 @@ every supported PHP version on each push and pull request and runs
 `tests/image-formats.php` inside it. The script checks that GD, Imagick
 and vips can read, manipulate and write JPEG, PNG, GIF, WebP, AVIF and
 HEIC images, can read SVG, TIFF and the first page of a PDF, keep
-transparency when writing PNG, GIF, WebP and AVIF, and keep the frames of
+transparency when writing PNG, GIF, WebP, AVIF and HEIC, and keep the frames of
 an animated GIF when writing GIF and WebP. A library without any API for
 a format, such as GD built without AVIF support, is reported as skipped.
 Any other failure, or a format which no library can read or write, fails
