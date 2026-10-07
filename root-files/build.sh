@@ -91,6 +91,7 @@ build_get_runtime_packages() {
         libncurses6
         libsqlite3-0
         libheif-plugin-aomenc
+        libheif-plugin-x265
     "
 
     echo $packages
