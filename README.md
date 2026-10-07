@@ -174,8 +174,8 @@ As of October 2026 the test reports these gaps:
   `libheif-plugin-aomenc` as a runtime package of the imagick or vips
   extension gives both an AV1 encoder. GD would additionally need
   `libavif-dev` at build time and `--with-avif` in the configure call.
-- Imagick cannot read SVG. ImageMagick delegates SVG rendering to an
-  external program which is not installed. libvips renders SVG through
+- Imagick reads SVG through the coder from `libmagickcore-7.q16-10-extra`,
+  which Debian builds without librsvg. libvips renders SVG through
   librsvg.
 - Imagick cannot read PDF because Ghostscript is not installed, although
   the ImageMagick policy explicitly allows the PDF coder. libvips renders
