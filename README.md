@@ -144,8 +144,8 @@ Check the latest stable release on [php.net](https://www.php.net).
 The workflow `.github/workflows/docker.test.yaml` builds the image for
 every supported PHP version on each push and pull request and runs
 `tests/image-formats.php` inside it. The script checks that GD, Imagick
-and vips can read, manipulate and write JPEG, PNG, GIF, WebP and AVIF
-images, can read SVG, HEIC, TIFF and the first page of a PDF, keep
+and vips can read, manipulate and write JPEG, PNG, GIF, WebP, AVIF and
+HEIC images, can read SVG, TIFF and the first page of a PDF, keep
 transparency when writing PNG, GIF, WebP and AVIF, and keep the frames of
 an animated GIF when writing GIF and WebP. A library without any API for
 a format, such as GD built without AVIF support, is reported as skipped.

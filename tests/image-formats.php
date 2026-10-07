@@ -10,7 +10,7 @@ declare(strict_types=1);
  * runs it through resize, rotate, flip and crop, writes it in each format and
  * reads the result back. The fixtures in tests/fixtures were produced by an
  * independent toolchain and cover reading, including formats which are only
- * ever read on a web server, such as SVG, HEIC, TIFF and PDF. Files written
+ * ever read on a web server, such as SVG, TIFF and PDF. Files written
  * by one library are read by the others as well. Separate checks make sure
  * that transparency and animation frames survive a resize and a write.
  *
@@ -23,8 +23,8 @@ declare(strict_types=1);
  * least one library.
  */
 
-const WRITABLE_FORMATS = ['jpeg', 'png', 'gif', 'webp', 'avif'];
-const READ_ONLY_FORMATS = ['svg', 'heic', 'tiff', 'pdf'];
+const WRITABLE_FORMATS = ['jpeg', 'png', 'gif', 'webp', 'avif', 'heic'];
+const READ_ONLY_FORMATS = ['svg', 'tiff', 'pdf'];
 const ALPHA_FORMATS = ['png', 'gif', 'webp', 'avif'];
 const ANIMATION_FORMATS = ['gif', 'webp'];
 
@@ -478,6 +478,7 @@ final class VipsLibrary implements ImageLibrary
         'gif' => ['VipsForeignSaveCgifFile', 'VipsForeignSaveGifFile'],
         'webp' => ['VipsForeignSaveWebpFile'],
         'avif' => ['VipsForeignSaveHeifFile', 'VipsForeignSaveAvifFile'],
+        'heic' => ['VipsForeignSaveHeifFile'],
     ];
 
     public function name(): string
@@ -540,7 +541,7 @@ final class VipsLibrary implements ImageLibrary
         $this->requireOperation(self::SAVERS[$format], sprintf('this libvips build has no %s saver', $format));
         $options = match ($format) {
             'jpeg', 'webp' => ['Q' => 90],
-            'avif' => ['Q' => 60],
+            'avif', 'heic' => ['Q' => 60],
             default => [],
         };
         if (!is_array(vips_image_write_to_file($image, $path, $options))) {
@@ -772,7 +773,7 @@ final class Report
         $lines[] = '';
         $lines[] = implode(', ', $versions);
         $lines[] = '';
-        $lines[] = 'Read and write per library (read / write, read only for the last four):';
+        $lines[] = sprintf('Read and write per library (read / write, read only for the last %d):', count(READ_ONLY_FORMATS));
         $lines[] = '';
         $lines[] = '| Library | Manipulate | ' . implode(' | ', [...WRITABLE_FORMATS, ...READ_ONLY_FORMATS]) . ' |';
         $lines[] = '|---|---|' . str_repeat('---|', count(WRITABLE_FORMATS) + count(READ_ONLY_FORMATS));
@@ -971,6 +972,9 @@ function detectFormat(string $path): ?string
     }
     if (substr($bytes, 4, 4) === 'ftyp' && in_array(substr($bytes, 8, 4), ['avif', 'avis'], true)) {
         return 'avif';
+    }
+    if (substr($bytes, 4, 4) === 'ftyp' && in_array(substr($bytes, 8, 4), ['heic', 'heix'], true)) {
+        return 'heic';
     }
     return null;
 }
