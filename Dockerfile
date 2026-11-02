@@ -54,6 +54,8 @@ RUN export FLOWNATIVE_LOG_PATH_AND_FILENAME=/dev/stdout \
     && /build.sh build_extension imagick \
     && /build.sh build_extension yaml \
     && /build.sh build_extension phpredis \
+    && /build.sh build_extension xdebug \
+    && /build.sh disable_extension xdebug \
     && /build.sh build_extension php-spx \
     && /build.sh disable_extension php-spx \
     && /build.sh build_extension php-excimer \
