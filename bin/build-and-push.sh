@@ -172,9 +172,12 @@ for version in ${versions}; do
     cache_reference="${CACHE_REPOSITORY}:${version%.*}"
     metadata_file="${work_directory}/metadata-${version}.json"
 
+    # --pull, because the nightly builds are meant to pick up the newest
+    # base image, which is published under the same tag.
     arguments=(
         --builder "${builder}"
         --platform "${PLATFORMS}"
+        --pull
         --build-arg "PHP_VERSION=${version}"
         --label "org.opencontainers.image.title=PHP"
         --label "org.opencontainers.image.description=Docker image providing PHP CLI and PHP-FPM with various extensions pre-installed"
