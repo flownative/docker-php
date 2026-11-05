@@ -13,6 +13,9 @@ CACHE_REPOSITORY="harbor.flownative.io/docker/php-build-cache"
 PLATFORMS="linux/amd64,linux/arm64"
 SOURCE_URL="https://github.com/flownative/docker-php"
 WORKFLOW_FILE=".github/workflows/docker.build.yaml"
+# Like on GitHub, the matrix comes from the workflow on main, while the
+# code is the one of the latest release tag.
+WORKFLOW_REF="origin/main"
 NEXT_STEPS="Images derived from these need to be rebuilt next:
   docker-beach-php  (then docker-beach-php-k8s)
   docker-composer
@@ -23,7 +26,7 @@ usage() {
 Usage: $(basename "$0") [options]
 
 Builds the PHP images from the latest release tag, with the same tags,
-labels, platforms and build cache as the GitHub workflow.
+labels and platforms as the GitHub workflow, and reads its build cache.
 
 Without --build or --push only the plan is shown.
 
@@ -98,12 +101,15 @@ trap cleanup EXIT
 git -C "${repository_root}" worktree add --quiet --detach "${worktree}" "${ref}"
 revision="$(git -C "${worktree}" rev-parse HEAD)"
 created="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+workflow="${work_directory}/workflow.yaml"
+git -C "${repository_root}" show "${WORKFLOW_REF}:${WORKFLOW_FILE}" > "${workflow}" \
+    || fail "Could not read ${WORKFLOW_FILE} from ${WORKFLOW_REF}"
 
 # --- Versions -----------------------------------------------------------------
 
 # The matrix line looks like: "php: [ 8.2.35, 8.3.36, 8.4.27, 8.5.12 ]"
-matrix="$(sed -n 's/^[[:space:]]*php:[[:space:]]*\[\(.*\)\].*$/\1/p' "${worktree}/${WORKFLOW_FILE}" | head -n 1 | tr ',' ' ' | tr -s ' ' | sed 's/^ //; s/ $//')"
-[ -n "${matrix}" ] || fail "No PHP versions found in ${WORKFLOW_FILE} of ${ref}"
+matrix="$(sed -n 's/^[[:space:]]*php:[[:space:]]*\[\(.*\)\].*$/\1/p' "${workflow}" | head -n 1 | tr ',' ' ' | tr -s ' ' | sed 's/^ //; s/ $//')"
+[ -n "${matrix}" ] || fail "No PHP versions found in ${WORKFLOW_FILE} of ${WORKFLOW_REF}"
 
 versions=""
 for version in ${matrix}; do
@@ -113,7 +119,7 @@ for version in ${matrix}; do
         versions="${versions} ${version}"
     fi
 done
-[ -n "${versions}" ] || fail "PHP ${php_filter} is not built by ${ref} (available: ${matrix})"
+[ -n "${versions}" ] || fail "PHP ${php_filter} is not built according to ${WORKFLOW_REF} (available: ${matrix})"
 
 tags_for() {
     local version="$1" image
@@ -126,6 +132,7 @@ tags_for() {
 # --- Plan ---------------------------------------------------------------------
 
 info "Source:    ${ref} (${revision})"
+info "Matrix:    ${WORKFLOW_FILE} on ${WORKFLOW_REF}"
 info "Platforms: ${PLATFORMS}"
 info "Mode:      ${mode}"
 info "Cache:     ${use_cache}"
@@ -190,8 +197,14 @@ for version in ${versions}; do
         --label "org.opencontainers.image.url=${SOURCE_URL}"
         --metadata-file "${metadata_file}"
     )
+    # The workflow keeps one cache per platform. This build covers both
+    # platforms at once, so it reads both caches but writes none, rather
+    # than replacing them with a combined one.
     if [ "${use_cache}" = true ]; then
-        arguments+=(--cache-from "type=registry,ref=${cache_reference}")
+        arguments+=(
+            --cache-from "type=registry,ref=${cache_reference}-amd64"
+            --cache-from "type=registry,ref=${cache_reference}-arm64"
+        )
     else
         arguments+=(--no-cache)
     fi
@@ -203,7 +216,6 @@ for version in ${versions}; do
         arguments+=(
             --push
             --provenance "mode=max"
-            --cache-to "type=registry,ref=${cache_reference},mode=max,image-manifest=true,oci-mediatypes=true,ignore-error=true"
         )
     fi
 

@@ -227,9 +227,10 @@ derived from this one.
 
 If GitHub Actions is not available, `bin/build-and-push.sh` builds the
 images on a workstation the way the build workflow does: from the latest
-release tag, for `linux/amd64` and `linux/arm64`, with the same tags,
-labels and build cache, and with the PHP versions taken from
-`.github/workflows/docker.build.yaml` of that tag.
+release tag, for `linux/amd64` and `linux/arm64`, with the same tags
+and labels, and with the PHP versions taken from
+`.github/workflows/docker.build.yaml` on `main`, like on GitHub. It
+reads the registry build cache of the workflow, but does not write it.
 
 ```bash
 docker login
