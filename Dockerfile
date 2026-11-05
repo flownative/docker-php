@@ -8,7 +8,7 @@
 # The stage runs on the build platform and cross-compiles, so no emulation is
 # involved.
 
-FROM --platform=$BUILDPLATFORM golang:1-alpine AS envsubst-builder
+FROM --platform=$BUILDPLATFORM harbor.flownative.io/docker.io/library/golang:1-alpine AS envsubst-builder
 
 ARG ENVSUBST_VERSION=v1.4.2
 ARG TARGETOS
