@@ -16,7 +16,7 @@ env:
 jobs:
   # The images are always built from the latest release, also on schedule.
   prepare:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       tag: ${{ steps.latest_version.outputs.tag }}
     steps:
@@ -40,9 +40,9 @@ jobs:
         platform: [ linux/amd64, linux/arm64 ]
         include:
           - platform: linux/amd64
-            runner: ubuntu-24.04
+            runner: ubuntu-26.04
           - platform: linux/arm64
-            runner: ubuntu-24.04-arm
+            runner: ubuntu-26.04-arm
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v7
@@ -129,7 +129,7 @@ jobs:
   # the names of the digest artifacts, so they are listed only once above.
   merge:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Download digests
         uses: actions/download-artifact@v8
@@ -186,7 +186,7 @@ jobs:
           done
 
   announce:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: merge
     steps:
       - name: Dispatch to beach-php
