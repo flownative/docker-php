@@ -222,3 +222,29 @@ be rebuilt using the latest Flownative base image (`flownative/base`).
 Whenever new images were built, a custom event is triggered which in
 turn triggers builds of the `flownative/beach-php` image, which is
 derived from this one.
+
+### Building without GitHub Actions
+
+If GitHub Actions is not available, `bin/build-and-push.sh` builds the
+images on a workstation the way the build workflow does: from the latest
+release tag, for `linux/amd64` and `linux/arm64`, with the same tags
+and labels, and with the PHP versions taken from
+`.github/workflows/docker.build.yaml` on `main`, like on GitHub. It
+reads the registry build cache of the workflow, but does not write it.
+
+```bash
+docker login
+docker login harbor.flownative.io
+
+bin/build-and-push.sh                   # show what would be built
+bin/build-and-push.sh --push            # build and push all versions
+bin/build-and-push.sh --push --php 8.4  # only one version
+```
+
+`--build` builds without pushing, `--ref <tag>` builds another tag, and
+`--no-cache` builds from scratch. See `bin/build-and-push.sh --help`.
+
+The script does not trigger the builds of the derived images. Run the
+script of the same name in `docker-beach-php` (and afterwards
+`docker-beach-php-k8s`) and in `docker-composer` once the images are
+pushed.
