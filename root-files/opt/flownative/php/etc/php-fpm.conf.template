@@ -29,4 +29,9 @@ request_slowlog_timeout = ${PHP_FPM_REQUEST_SLOWLOG_TIMEOUT}
 
 pm.status_path = /php-fpm-status
 
+; Only run files ending in .php. The default also allows .phar, which is not on
+; the upload blacklist of Flow. The status path above is answered before this
+; check and is not affected.
+security.limit_extensions = .php
+
 clear_env = no
