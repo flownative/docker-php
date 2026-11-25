@@ -120,6 +120,7 @@ build_compile_php() {
 
     php_source_url="https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz"
 
+
     info "🛠 Downloading source code for PHP ${PHP_VERSION} from ${php_source_url} ..."
     with_backoff "curl -sfSL ${php_source_url} -o php.tar.gz" "15" || (
         error "Failed downloading PHP source from ${php_source_url}"
@@ -148,7 +149,7 @@ build_compile_php() {
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
 
-    if [[ "${PHP_VERSION}" =~ ^8.[1-5] ]]; then
+    if [[ "${PHP_VERSION}" =~ ^8.[1-6] ]]; then
         ./configure \
             --prefix=${PHP_BASE_PATH} \
             --with-config-file-path="${PHP_BASE_PATH}/etc" \
@@ -225,8 +226,6 @@ build_php_extension() {
     local -r extension_build_packages=$(eval "extensions_${extension_name}_build_packages")
     local -r extension_runtime_packages=$(eval "extensions_${extension_name}_runtime_packages")
 
-    eval "extensions_${extension_name}_prepare"
-
     # -----------------------------------------------------------------------------------
     # Install packages
     if [[ "${extension_runtime_packages}" != "" ]]; then
@@ -242,6 +241,10 @@ build_php_extension() {
     else
         info "🔌 ${extension_name}: No additional build packages to install"
     fi
+
+    # -----------------------------------------------------------------------------------
+    # Prepare the system, after packages are installed, so that their files can be adjusted
+    eval "extensions_${extension_name}_prepare"
 
     if [[ "${extension_url}" != "" ]]; then
         # ---------------------------------------------------------------------------------
@@ -284,6 +287,12 @@ build_php_extension() {
 
     # For GCC warning options see: https://gcc.gnu.org/onlinedocs/gcc-3.4.4/gcc/Warning-Options.html
     export CFLAGS='-Wno-deprecated-declarations -Wno-stringop-overflow -Wno-implicit-function-declaration'
+
+    # PHP 8.6 removed the XtOffsetOf() macro, which several extensions still use. Until
+    # they have releases supporting PHP 8.6, map it to the standard offsetof().
+    if [[ "${PHP_VERSION}" =~ ^8.6 ]]; then
+        export CFLAGS="${CFLAGS} -DXtOffsetOf=offsetof"
+    fi
 
     ./configure ${extension_configure_arguments} 1>$(debug_device) || (
         error "Configure failed for extension ${extension_name}"
@@ -404,7 +413,7 @@ case $1 in
 init)
     banner_flownative 'PHP'
 
-    if [[ ! "${PHP_VERSION}" =~ ^8.[1-5] ]]; then
+    if [[ ! "${PHP_VERSION}" =~ ^8.[1-6] ]]; then
         error "🛠 Unsupported PHP version '${PHP_VERSION}'"
         exit 1
     fi
@@ -425,11 +434,27 @@ prepare)
 build)
     build_compile_php
     ;;
-build_extension)
-    build_php_extension $2
+build_extensions)
+    if [[ "${PHP_VERSION}" =~ ^8.[2-5] ]]; then
+      build_php_extension vips
+      build_php_extension igbinary
+    fi
+    build_php_extension imagick
+    build_php_extension yaml
+    build_php_extension phpredis
+    build_php_extension xdebug
+    build_php_extension php-excimer
+    build_php_extension php-spx
+    build_php_extension ssh2
+    build_php_extension mongodb
     ;;
-disable_extension)
-    build_disable_php_extension $2
+disable_extensions)
+    if [[ "${PHP_VERSION}" =~ ^8.[2-5] ]]; then
+      build_disable_php_extension igbinary
+    fi
+    build_disable_php_extension xdebug
+    build_disable_php_extension php-excimer
+    build_disable_php_extension php-spx
     ;;
 clean)
     build_adjust_permissions
